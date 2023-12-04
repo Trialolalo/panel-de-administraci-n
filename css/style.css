@@ -1,0 +1,531 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    background-color: hsl(195, 50%, 79%);
+    margin: 0 auto;
+    width: 80%;
+}
+
+header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem 0;
+}
+
+button{
+    background: none;
+    border: none;
+}
+
+.menu{
+    background: hsl(0, 79%, 34%);
+    height: 100vh;
+    width: auto;
+    left: 0;
+    position: fixed;
+    transition: top 1s;
+    top: -100vh;
+    width: 100%;
+    z-index: 1000;
+}
+
+.menu.active{
+    top: 0;
+}
+
+.menu-button{
+    position: relative;
+    z-index: 1001;
+    width: 100%;
+    border: none;
+    background: none;
+}
+
+.menu-button.active{
+    z-index: 1001;
+}
+
+
+
+.burger-menu{
+    width: 5%;
+}
+
+
+.box {
+    border-radius: 2px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  .btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80px;
+    cursor: pointer;
+  }
+  
+  .btn span {
+    display: block;
+    width: 80%;
+    height: 8px;
+    background: hsl(0, 0%, 100%);
+    transition: all .3s;
+    position: relative;
+  }
+  
+  .btn span + span {
+    margin-top: 14px;
+  }
+  
+  .active .btn span:nth-child(1) {
+    animation: ease .7s top forwards;
+  }
+  
+  .btn span:nth-child(1) {
+    animation: ease .7s top-2 forwards;
+  }
+  
+  .active .btn span:nth-child(2) {
+    animation: ease .7s scaled forwards;
+  }
+  
+  .btn span:nth-child(2) {
+    animation: ease .7s scaled-2 forwards;
+  }
+  
+  .active .btn span:nth-child(3) {
+    animation: ease .7s bottom forwards;
+  }
+  
+  .not-active .btn span:nth-child(3) {
+    animation: ease .7s bottom-2 forwards;
+  }
+  
+  @keyframes top {
+    0% {
+      top: 0;
+      transform: rotate(0);
+    }
+    50% {
+      top: 22px;
+      transform: rotate(0);
+    }
+    100% {
+      top: 22px;
+      transform: rotate(45deg);
+    }
+  }
+  
+  @keyframes top-2 {
+    0% {
+      top: 22px;
+      transform: rotate(45deg);
+    }
+    50% {
+      top: 22px;
+      transform: rotate(0deg);
+    }
+    100% {
+      top: 0;
+      transform: rotate(0deg);
+    }
+  }
+  
+  @keyframes bottom {
+    0% {
+      bottom: 0;
+      transform: rotate(0);
+    }
+    50% {
+      bottom: 22px;
+      transform: rotate(0);
+    }
+    100% {
+      bottom: 22px;
+      transform: rotate(135deg);
+    }
+  }
+  
+  @keyframes bottom-2 {
+    0% {
+      bottom: 22px;
+      transform: rotate(135deg);
+    }
+    50% {
+      bottom: 22px;
+      transform: rotate(0);
+    }
+    100% {
+      bottom: 0;
+      transform: rotate(0);
+    }
+  }
+  
+  @keyframes scaled {
+    50% {
+      transform: scale(0);
+    }
+    100% {
+      transform: scale(0);
+    }
+  }
+  
+  @keyframes scaled-2 {
+    0% {
+      transform: scale(0);
+    }
+    50% {
+      transform: scale(0);
+    }
+    100% {
+      transform: scale(1);
+    }
+}
+
+.container{
+    display: flex;
+    gap: 3rem;
+}
+
+.filter {
+    background-color: hsl(0, 0%, 100%);
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.filter-slide{
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.filter svg{
+  fill: hsl(219, 79%, 66%);
+  width: 2rem;
+}
+
+.filter-modal{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    background-color: hsla(0, 0%, 14%, 0.555);
+    visibility: hidden;
+    position: fixed;
+    height: 100vh;
+    width: 100%;
+    left: 0;
+    top: 0;
+    opacity: 0.5;
+    overflow: hidden;
+    transition: opacity 200ms ease-in, visibility 0ms ease-in 0ms;
+    z-index: 1002;
+}
+
+.filter-modal.active{
+    opacity: 1;
+    visibility: visible;
+}
+
+.filter-form{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    background-color: hsl(195, 50%, 79%);
+    padding: 1rem;
+}
+
+.filter-form .form-row{
+    justify-content: space-between;
+}
+
+.filter-form h3{
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+}
+
+.button-filter button{
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    background-color: hsl(88, 67%, 62%);
+    padding: 1rem;
+    cursor: pointer;
+    width: 9rem;
+}
+
+.button-cancel button{
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    background-color: hsl(0, 77%, 66%);
+    padding: 1rem;
+    cursor: pointer;
+    width: 9rem;
+}
+
+.tables{
+    flex: 1;
+}
+
+.table-registers{
+  max-height: 70vh;
+  overflow-y: scroll;
+}
+
+.table-registers::-webkit-scrollbar::-ms-thumb{
+  display: none;
+}
+
+.table-top{
+    background-color: hsl(225, 54%, 33%);
+}
+
+.table-edit{
+    display: flex;
+    justify-content: flex-end;
+}
+
+.pencil svg{
+    width: 2rem;
+    height: 2rem;
+    fill: hsl(0, 0%, 100%);
+    cursor: pointer;
+}
+
+.pencil svg:hover{
+    fill: hsl(88, 67%, 62%);
+}
+
+.trash svg{
+    width: 2rem;
+    height: 2rem;
+    fill: hsl(0, 0%, 100%);
+    cursor: pointer;
+}
+
+.trash svg:hover{
+    fill: hsl(0, 77%, 66%);
+}
+
+.trash-modal{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  background-color: hsla(0, 0%, 14%, 0.555);
+  visibility: hidden;
+  position: fixed;
+  height: 100vh;
+  width: 100%;
+  left: 0;
+  top: 0;
+  opacity: 0.5;
+  overflow: hidden;
+  transition: opacity 200ms ease-in, visibility 0ms ease-in 0ms;
+  z-index: 1002;
+}
+
+.trash-modal.active{
+  opacity: 1;
+  visibility: visible;
+}
+
+.trash-window{
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  background-color: hsl(195, 50%, 79%);
+  padding: 1rem;
+}
+
+.trash-modal.form-row{
+  justify-content: space-between;
+}
+
+.trash-modal h3{
+  font-family: 'Roboto Condensed', sans-serif;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
+
+.button-confirmation button{
+  font-family: 'Roboto Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 1.5rem;
+  background-color: hsl(88, 67%, 62%);
+  padding: 1rem;
+  cursor: pointer;
+  width: 9rem;
+}
+
+.button-cancelation button{
+  font-family: 'Roboto Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 1.5rem;
+  background-color: hsl(0, 77%, 66%);
+  padding: 1rem;
+  cursor: pointer;
+  width: 9rem;
+}
+
+.table-info{
+    background-color: hsl(0, 0%, 100%);
+}
+
+.table-info ul{
+    list-style: none;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    font-weight: bold;
+    color: hsl(0, 0%, 15%);
+    font-family: 'Roboto Condensed', sans-serif;
+}
+
+.form{
+    flex: 2;
+}
+
+.form-row{
+    display: flex;
+    gap: 1rem;
+}
+
+.form-element{
+    flex: 1;
+}
+
+.form-element-label{
+    background-color: hsl(225, 54%, 33%);
+    padding: 0.2rem;
+}
+
+label{
+    color: hsl(0, 0%, 100%);
+    font-size: large;
+    border: none;
+    padding: 1rem;
+    font-family: 'Roboto Condensed', sans-serif;
+}
+
+.form-element-input{
+    margin-bottom: 1rem;
+    background-color: hsl(0, 0%, 100%);
+}
+
+.form-element-input textarea{
+    background-color: hsl(0, 0%, 100%);
+    width: 100%;
+}
+
+input{
+    box-sizing: border-box;
+    padding: 0.5rem;
+    width: 100%;
+    height: 2rem;
+}
+
+.validate.active{
+  border-color: hsl(0, 100%, 50%);
+  border-width: 0.25rem;
+}
+
+.tabs{
+    display: flex;
+    background-color: hsl(0, 0%, 100%);
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.tab-selector{
+    display: flex;
+    justify-content: flex-start;
+    gap: 0.5rem;
+    box-sizing: border-box;
+    align-items: center;
+    width: 100%;
+}
+
+.tab.active{
+    background-color: hsl(225, 54%, 33%);
+    height: 100%;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.tab.active button{
+  color: hsl(0, 0%, 100%);
+  font-family: 'Roboto Condensed', sans-serif;
+  font-weight: 400;
+  font-size: 1rem;
+}
+
+.tab{
+  background-color: transparent;
+    height: 100%;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.tab button{
+  font-family: 'Roboto Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  background: transparent;
+  cursor: pointer;
+  padding: 1rem;
+}
+
+.form-buttons {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0.5rem;
+}
+  
+  .form-clean-button button,
+  .form-save-button button {
+    border: none;
+    background: none;
+}
+
+  .form-clean-button button svg,
+  .form-save-button button svg {
+    width: 2rem;
+}
+  
+  .form-clean-button button svg path,
+  .form-save-button button svg path {
+    fill: hsl(219, 79%, 66%);
+}
+  
+  .form-clean-button button:hover svg path,
+  .form-save-button button:hover svg path {
+    fill: hsl(225, 54%, 33%);
+}
+
+.tab-content{
+  visibility: hidden;
+  display: none;
+}
+
+.tab-content.active{
+  visibility: visible;
+  display: block;
+}
