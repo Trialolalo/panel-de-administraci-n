@@ -21,7 +21,11 @@ class ModalDestroy extends HTMLElement {
         this.shadow.innerHTML =
         /*html*/`
         <style>
-
+            button{
+                background: none;
+                border: none;
+            }
+            
             .form-row{
                 display: flex;
                 gap: 1rem;

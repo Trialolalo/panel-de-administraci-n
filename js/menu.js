@@ -35,6 +35,7 @@ class Menu extends HTMLElement {
                 width: 100%;
                 border: none;
                 background: none;
+                padding: 0;
             }
 
             .menu-button.active{
@@ -47,14 +48,13 @@ class Menu extends HTMLElement {
     
             .btn {
                 position: relative;
-                width: 80px;
+                width: 75px;
                 cursor: pointer;
-                
             }
     
             .btn span {
                 display: block;
-                width: 80%;
+                width: 100%;
                 height: 8px;
                 background: hsl(0, 0%, 100%);
                 transition: all .3s;
