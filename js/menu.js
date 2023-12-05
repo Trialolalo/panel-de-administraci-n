@@ -46,12 +46,10 @@ class Menu extends HTMLElement {
             }
     
             .btn {
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                width: 75px;
+                position: relative;
+                width: 80px;
                 cursor: pointer;
+                
             }
     
             .btn span {
