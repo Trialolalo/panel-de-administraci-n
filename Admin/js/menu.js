@@ -1,17 +1,16 @@
 class Menu extends HTMLElement {
+  constructor () {
+    super()
+    this.shadow = this.attachShadow({ mode: 'open' })
+  }
 
-    constructor () {
-      super()
-      this.shadow = this.attachShadow({ mode: 'open' })
-    }
-  
-    connectedCallback () {
-      this.render()
-    }
-  
-    render () {
-        this.shadow.innerHTML =
-        /*html*/`
+  connectedCallback () {
+    this.render()
+  }
+
+  render () {
+    this.shadow.innerHTML =
+      /* html */`
         <style>
             .menu{
                 background: hsl(0, 79%, 34%);
@@ -182,15 +181,14 @@ class Menu extends HTMLElement {
         <div class="menu"></div>
       `
 
-      const menuButton = this.shadow.querySelector(".menu-button");
-      const menu = this.shadow.querySelector(".menu");
-    
-      menuButton.addEventListener("click", () => {
-          menu.classList.toggle("active");
-          menuButton.classList.toggle("active");
-      });
-  
-    }
+    const menuButton = this.shadow.querySelector('.menu-button')
+    const menu = this.shadow.querySelector('.menu')
+
+    menuButton.addEventListener('click', () => {
+      menu.classList.toggle('active')
+      menuButton.classList.toggle('active')
+    })
+  }
 }
-  
-customElements.define('menu-component', Menu);
+
+customElements.define('menu-component', Menu)

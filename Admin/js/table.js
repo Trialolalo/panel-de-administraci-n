@@ -1,18 +1,16 @@
 class Table extends HTMLElement {
+  constructor () {
+    super()
+    this.shadow = this.attachShadow({ mode: 'open' })
+  }
 
-    constructor () {
-      super()
-      this.shadow = this.attachShadow({ mode: 'open' })
-    }
-  
-    connectedCallback () {
+  connectedCallback () {
+    this.render()
+  }
 
-        this.render()
-    }
-  
-    render () {
-        this.shadow.innerHTML =
-        /*html*/`
+  render () {
+    this.shadow.innerHTML =
+      /* html */`
         <style>
 
         button{
@@ -204,19 +202,19 @@ class Table extends HTMLElement {
             </div>
         </div>
       `
-  
-        const tableSection = this.shadow.querySelector(".tables");
 
-        tableSection?.addEventListener('click', async (event) => {
-            if (event.target.closest('.trash')) {
-                document.dispatchEvent(new CustomEvent('showModalDestroy'))
-            }
+    const tableSection = this.shadow.querySelector('.tables')
 
-            if (event.target.closest('.filter-slide')){
-                document.dispatchEvent(new CustomEvent('showModalFilter'))
-            }
-        });
-    }
+    tableSection?.addEventListener('click', async (event) => {
+      if (event.target.closest('.trash')) {
+        document.dispatchEvent(new CustomEvent('showModalDestroy'))
+      }
+
+      if (event.target.closest('.filter-slide')) {
+        document.dispatchEvent(new CustomEvent('showModalFilter'))
+      }
+    })
+  }
 }
-  
-customElements.define('table-component', Table);
+
+customElements.define('table-component', Table)

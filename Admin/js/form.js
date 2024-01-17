@@ -1,19 +1,16 @@
 class Form extends HTMLElement {
+  constructor () {
+    super()
+    this.shadow = this.attachShadow({ mode: 'open' })
+  }
 
-    constructor () {
-      super()
-      this.shadow = this.attachShadow({ mode: 'open' })
-    }
-  
-    connectedCallback () {
+  connectedCallback () {
+    this.render()
+  }
 
-
-        this.render()
-    }
-  
-    render () {
-        this.shadow.innerHTML =
-        /*html*/`
+  render () {
+    this.shadow.innerHTML =
+      /* html */`
         <style>
             
             button{
@@ -271,73 +268,63 @@ class Form extends HTMLElement {
             </form>
         </section>            
       `
-  
-    const tabSelector = this.shadow.querySelector(".tab-selector")
-    const tabContents = this.shadow.querySelectorAll(".tab-content")
-     
-        tabSelector.addEventListener('click', async (event) => {
-  
-            if (event.target.closest('.tab')) {
-              const tab = event.target.closest('.tab');
-              tab.parentElement.querySelector('.active').classList.remove('active');
-              tab.classList.add('active');
-  
-              tab.closest('section').querySelector(".tab-content.active").classList.remove('active');
-              tab.closest('section').querySelector(`.tab-content[data-tab="${tab.dataset.tab}"]`).classList.add('active')
+
+    const tabSelector = this.shadow.querySelector('.tab-selector')
+    const tabContents = this.shadow.querySelectorAll('.tab-content')
+
+    tabSelector.addEventListener('click', async (event) => {
+      if (event.target.closest('.tab')) {
+        const tab = event.target.closest('.tab')
+        tab.parentElement.querySelector('.active').classList.remove('active')
+        tab.classList.add('active')
+
+        tab.closest('section').querySelector('.tab-content.active').classList.remove('active')
+        tab.closest('section').querySelector(`.tab-content[data-tab="${tab.dataset.tab}"]`).classList.add('active')
+      }
+    })
+
+    const form = this.shadow.querySelector('.form')
+
+    form.addEventListener('input', (event) => {
+      if (event.target.closest('.validate')) {
+        const validate = event.target.closest('.validate')
+
+        if (validate.dataset.minlength) {
+          const text = validate.value
+
+          if (text.length < validate.dataset.minlength) {
+            validate.classList.add('active')
+
+            if (text.length == 0) {
+              validate.classList.remove('active')
             }
-        });
+          } else {
+            validate.classList.remove('active')
+          }
+        }
 
-    
+        if (validate.dataset.onlyletters) {
+          event.target.value = event.target.value.replace(/[^A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]/g, '')
+        }
 
-    const form = this.shadow.querySelector('.form');
+        if (validate.dataset.mail) {
+          const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+        }
+      }
+    })
 
-        form.addEventListener("input", (event) => {
+    const notificationButton = this.shadow.querySelector('.form-save-button')
+    const notification = this.shadow.querySelector('.notification')
 
-            if(event.target.closest('.validate')){
-                const validate = event.target.closest('.validate');
+    notificationButton.addEventListener('click', () => {
+      notification.classList.toggle('active')
+      notificationButton.classList.toggle('active')
 
-                
-                if(validate.dataset.minlength){
-                    let text = validate.value;
-
-                    if(text.length < validate.dataset.minlength) {
-                        validate.classList.add('active');
-
-                        if (text.length == 0) {
-                            validate.classList.remove('active');
-                        }
-                    }
-                    else {
-                        validate.classList.remove('active');
-
-                    }
-                }
-                
-
-                if(validate.dataset.onlyletters){
-                    event.target.value = event.target.value.replace(/[^A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]/g, '');
-                }
-            
-                if(validate.dataset.mail){
-                    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-                    
-                }
-            }
-        });
-
-    const notificationButton = this.shadow.querySelector(".form-save-button");
-    const notification = this.shadow.querySelector(".notification");
-      
-        notificationButton.addEventListener("click", () => {
-            notification.classList.toggle("active");
-            notificationButton.classList.toggle("active");
-
-            setTimeout(() => {
-                notification.classList.remove("active");
-              }, 2500);
-        });
-    }
-
+      setTimeout(() => {
+        notification.classList.remove('active')
+      }, 2500)
+    })
+  }
 }
-  
-customElements.define('form-component', Form);
+
+customElements.define('form-component', Form)

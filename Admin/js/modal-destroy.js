@@ -1,25 +1,21 @@
 class ModalDestroy extends HTMLElement {
+  constructor () {
+    super()
+    this.shadow = this.attachShadow({ mode: 'open' })
+  }
 
-    constructor () {
-      super()
-      this.shadow = this.attachShadow({ mode: 'open' })
-    }
-  
-    connectedCallback () {
+  connectedCallback () {
+    document.addEventListener('showModalDestroy', event => {
+      const trashModal = this.shadow.querySelector('.trash-modal')
+      trashModal.classList.add('active')
+    })
 
-        
+    this.render()
+  }
 
-        document.addEventListener("showModalDestroy", (event => {
-            const trashModal = this.shadow.querySelector(".trash-modal")
-            trashModal.classList.add('active')
-        }));
-
-        this.render()
-    }
-  
-    render () {
-        this.shadow.innerHTML =
-        /*html*/`
+  render () {
+    this.shadow.innerHTML =
+      /* html */`
         <style>
             button{
                 background: none;
@@ -117,24 +113,18 @@ class ModalDestroy extends HTMLElement {
         </div>            
       `
 
-      const trashModal = this.shadow.querySelector(".trash-modal")
-    
-        trashModal?.addEventListener('click', async (event) => {
-    
-            if (event.target.closest('.button-cancelation')) {
-                trashModal.classList.remove('active')
-            }
-    
-            if (event.target.closest('.button-confirmation')) {
-                trashModal.classList.remove('active')
-            }
-        });
-    
+    const trashModal = this.shadow.querySelector('.trash-modal')
 
-    }
+    trashModal?.addEventListener('click', async (event) => {
+      if (event.target.closest('.button-cancelation')) {
+        trashModal.classList.remove('active')
+      }
 
+      if (event.target.closest('.button-confirmation')) {
+        trashModal.classList.remove('active')
+      }
+    })
+  }
 }
-  
-customElements.define('destroy-component', ModalDestroy);
 
-
+customElements.define('destroy-component', ModalDestroy)

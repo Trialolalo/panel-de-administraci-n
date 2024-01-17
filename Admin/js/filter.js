@@ -1,22 +1,20 @@
 class Filter extends HTMLElement {
+  constructor () {
+    super()
+    this.shadow = this.attachShadow({ mode: 'open' })
+  }
 
-    constructor () {
-      super()
-      this.shadow = this.attachShadow({ mode: 'open' })
-    }
-  
-    connectedCallback () {
+  connectedCallback () {
+    document.addEventListener('showModalFilter', event => {
+      this.openModal()
+    })
 
-        document.addEventListener("showModalFilter", (event => {
-            this.openModal()
-        }));
+    this.render()
+  }
 
-        this.render()
-    }
-  
-    render () {
-        this.shadow.innerHTML =
-        /*html*/`
+  render () {
+    this.shadow.innerHTML =
+      /* html */`
         <style>
 
         .form{
@@ -160,24 +158,24 @@ class Filter extends HTMLElement {
             </form>
         </div>  
       `
-  
-        const buttonCancel = this.shadow.querySelector(".button-cancel");
 
-        buttonCancel.addEventListener('click', async (event) => {
-            event.preventDefault();
-            this.closeModal()
-        });
-    }
+    const buttonCancel = this.shadow.querySelector('.button-cancel')
 
-    openModal(){
-        const filterModal = this.shadow.querySelector(".filter-modal");
-        filterModal.classList.add('active')
-    }
+    buttonCancel.addEventListener('click', async (event) => {
+      event.preventDefault()
+      this.closeModal()
+    })
+  }
 
-    closeModal(){
-        const filterModal = this.shadow.querySelector(".filter-modal");
-        filterModal.classList.remove("active");
-    }
+  openModal () {
+    const filterModal = this.shadow.querySelector('.filter-modal')
+    filterModal.classList.add('active')
+  }
+
+  closeModal () {
+    const filterModal = this.shadow.querySelector('.filter-modal')
+    filterModal.classList.remove('active')
+  }
 }
-  
-customElements.define('filter-component', Filter);
+
+customElements.define('filter-component', Filter)

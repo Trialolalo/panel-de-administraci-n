@@ -1,19 +1,16 @@
 class Form extends HTMLElement {
+  constructor () {
+    super()
+    this.shadow = this.attachShadow({ mode: 'open' })
+  }
 
-    constructor () {
-      super()
-      this.shadow = this.attachShadow({ mode: 'open' })
-    }
-  
-    connectedCallback () {
+  connectedCallback () {
+    this.render()
+  }
 
-
-        this.render()
-    }
-  
-    render () {
-        this.shadow.innerHTML =
-        /*html*/`
+  render () {
+    this.shadow.innerHTML =
+      /* html */`
         <style>
            
             .notification{
@@ -55,20 +52,19 @@ class Form extends HTMLElement {
                 <h3>Formulario guardado</h3>
             </div>        
       `
-  
-    const notificationButton = this.shadow.querySelector(".form-save-button");
-    const notification = this.shadow.querySelector(".notification");
-      
-        notificationButton.addEventListener("click", () => {
-            notification.classList.toggle("active");
-            notificationButton.classList.toggle("active");
 
-            setTimeout(() => {
-                notification.classList.remove("active");
-              }, 2500);
-        });
-    }
+    const notificationButton = this.shadow.querySelector('.form-save-button')
+    const notification = this.shadow.querySelector('.notification')
 
+    notificationButton.addEventListener('click', () => {
+      notification.classList.toggle('active')
+      notificationButton.classList.toggle('active')
+
+      setTimeout(() => {
+        notification.classList.remove('active')
+      }, 2500)
+    })
+  }
 }
-  
-customElements.define('form-component', Form);
+
+customElements.define('form-component', Form)
