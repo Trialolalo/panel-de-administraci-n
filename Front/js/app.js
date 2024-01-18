@@ -1,0 +1,9 @@
+import './header.js';
+import './logo.js';
+import './search-bar.js';
+import './user-area.js';
+import './main-banner.js';
+import './homepage.js'
+import './product-detail.js';
+import './checkout-modal.js';
+import './footer.js';
