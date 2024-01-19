@@ -2,52 +2,60 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('sale_tables', {
+    await queryInterface.createTable('images', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      cartId: {
-        allowNull: false,
-        type: Sequelize.INTEGER
-      },
-      customerId: {
-        allowNull: false,
-        type: Sequelize.INTEGER
-      },
-      paymentMethodId: {
-        allowNull: false,
-        type: Sequelize.INTEGER
-      },
-      couponId: {
-        allowNull: false,
-        type: Sequelize.INTEGER
-      },
-      reference: {
+      entity: {
         allowNull: false,
         type: Sequelize.STRING
       },
-      totalPrice: {
+      enityId: {
         allowNull: false,
-        type: Sequelize.DECIMAL
+        type: Sequelize.INTEGER
       },
-      totalBasePrice: {
+      imageConfigurationId: {
         allowNull: false,
-        type: Sequelize.DECIMAL
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'image_configurations',
+          key: 'id'
+        }
       },
-      totalTaxPrice: {
+      name: {
         allowNull: false,
-        type: Sequelize.DECIMAL
+        type: Sequelize.STRING
       },
-      saleDate: {
+      originalFilename: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.STRING
       },
-      saleTime: {
+      resistedFilename: {
         allowNull: false,
-        type: Sequelize.TIME
+        type: Sequelize.STRING
+      },
+      title: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
+      alt: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
+      languageAlias: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
+      mediaQuery: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
+      latencyMS: {
+        allowNull: false,
+        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,
@@ -61,9 +69,12 @@ module.exports = {
         type: Sequelize.DATE
       }
     })
+    await queryInterface.addIndex('images', ['imageConfigurationId'], {
+      name: 'images_imageConfigurationId_fk'
+    })
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('sale_tables')
+    await queryInterface.dropTable('images')
   }
 }

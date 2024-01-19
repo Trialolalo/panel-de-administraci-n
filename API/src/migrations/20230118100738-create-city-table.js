@@ -2,20 +2,24 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('products_categories', {
+    await queryInterface.createTable('cities', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      countryId: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'countries',
+          key: 'id'
+        }
+      },
       name: {
         allowNull: false,
         type: Sequelize.STRING
-      },
-      visible: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: 1
       },
       createdAt: {
         allowNull: false,
@@ -29,9 +33,12 @@ module.exports = {
         type: Sequelize.DATE
       }
     })
+    await queryInterface.addIndex('cities', ['countryId'], {
+      name: 'cities_countryId_fk'
+    })
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('products_categories')
+    await queryInterface.dropTable('cities')
   }
 }

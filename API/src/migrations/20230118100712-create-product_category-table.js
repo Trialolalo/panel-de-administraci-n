@@ -2,32 +2,20 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('images_configurations', {
+    await queryInterface.createTable('product_categories', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      entity: {
-        allowNull: false,
-        type: Sequelize.STRING
-      },
       name: {
         allowNull: false,
         type: Sequelize.STRING
       },
-      mediaQuery: {
-        allowNull: false,
-        type: Sequelize.STRING
-      },
-      widthPx: {
-        allowNull: false,
-        type: Sequelize.INTEGER
-      },
-      heightPx: {
-        allowNull: false,
-        type: Sequelize.INTEGER
+      visible: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: 1
       },
       createdAt: {
         allowNull: false,
@@ -44,6 +32,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('images_configurations')
+    await queryInterface.dropTable('product_categories')
   }
 }

@@ -2,32 +2,28 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('taxes', {
+    await queryInterface.createTable('locale_seo_redirects', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      countryId: {
+      localeSeoId: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'locale_seos',
+          key: 'id'
+        }
       },
-      type: {
+      languageAlias: {
         allowNull: false,
         type: Sequelize.STRING
       },
-      rate: {
+      oldUrl: {
         allowNull: false,
-        type: Sequelize.INTEGER
-      },
-      multiplier: {
-        allowNull: false,
-        type: Sequelize.DECIMAL
-      },
-      current: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: 1
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
@@ -41,9 +37,12 @@ module.exports = {
         type: Sequelize.DATE
       }
     })
+    await queryInterface.addIndex('locale_seo_redirects', ['localeSeoId'], {
+      name: 'locale_seo_redirects_localeSeoId_fk'
+    })
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('taxes')
+    await queryInterface.dropTable('locale_seo_redirects')
   }
 }

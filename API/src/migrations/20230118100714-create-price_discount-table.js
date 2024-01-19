@@ -2,48 +2,38 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('cart_details', {
+    await queryInterface.createTable('price_discounts', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      cartId: {
-        allowNull: false,
-        type: Sequelize.INTEGER
-      },
-      productId: {
-        allowNull: false,
-        type: Sequelize.INTEGER
-      },
-      localeId: {
-        allowNull: false,
-        type: Sequelize.INTEGER
-      },
       priceId: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'prices',
+          key: 'id'
+        }
       },
-      taxId: {
+      percentage: {
         allowNull: false,
         type: Sequelize.INTEGER
       },
-      priceDiscountId: {
-        allowNull: false,
-        type: Sequelize.INTEGER
-      },
-      basePrice: {
+      multiplier: {
         allowNull: false,
         type: Sequelize.DECIMAL
       },
-      taxPrice: {
-        allowNull: false,
-        type: Sequelize.DECIMAL
+      current: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: 1
       },
-      quantity: {
-        allowNull: false,
-        type: Sequelize.INTEGER
+      startsAt: {
+        type: Sequelize.DATE
+      },
+      endsAt: {
+        type: Sequelize.DATE
       },
       createdAt: {
         allowNull: false,
@@ -57,9 +47,12 @@ module.exports = {
         type: Sequelize.DATE
       }
     })
+    await queryInterface.addIndex('price_discounts', ['priceId'], {
+      name: 'price_discounts_priceId_fk'
+    })
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('cart_details')
+    await queryInterface.dropTable('price_discounts')
   }
 }

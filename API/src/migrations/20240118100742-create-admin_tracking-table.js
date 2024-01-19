@@ -2,28 +2,32 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('prices', {
+    await queryInterface.createTable('admin_trackings', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      productId: {
+      entity: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
+      entityId: {
         allowNull: false,
         type: Sequelize.INTEGER
       },
-      taxId: {
+      userId: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'users',
+          key: 'id'
+        }
       },
-      basePrice: {
+      action: {
         allowNull: false,
-        type: Sequelize.DECIMAL
-      },
-      current: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: 1
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
@@ -37,9 +41,12 @@ module.exports = {
         type: Sequelize.DATE
       }
     })
+    await queryInterface.addIndex('admin_trackings', ['userId'], {
+      name: 'admin_trackings_userId_fk'
+    })
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('prices')
+    await queryInterface.dropTable('admin_trackings')
   }
 }
