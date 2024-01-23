@@ -53,7 +53,7 @@ module.exports = function (sequelize, DataTypes) {
   })
 
   User.associate = function (models) {
-
+    User.hasMany(models.AdminTracking, { as: 'adminTrackings', foreignKey: 'userId' })
   }
 
   return User

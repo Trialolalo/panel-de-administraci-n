@@ -1,45 +1,34 @@
 module.exports = function (sequelize, DataTypes) {
-  const Sale = sequelize.define('Sale', {
+  const CustomerTracking = sequelize.define('CustomerTracking', {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
       allowNull: false
     },
-    cartId: {
-      type: DataTypes.INTEGER
-    },
     customerId: {
       type: DataTypes.INTEGER
     },
-    paymentMethodId: {
+    fingerprintId: {
       type: DataTypes.INTEGER
     },
-    couponId: {
+    localeSeoId: {
       type: DataTypes.INTEGER
     },
-    reference: {
-      type: DataTypes.STRING,
-      allowNull: false
+    localeSeoSlugId: {
+      type: DataTypes.INTEGER
     },
-    totalPrice: {
-      type: DataTypes.DECIMAL(10, 2),
-      allowNull: false
+    eventTime: {
+      type: DataTypes.DOUBLE
     },
-    totalBasePrice: {
-      type: DataTypes.DECIMAL(10, 2),
-      allowNull: false
+    eventName: {
+      type: DataTypes.STRING
     },
-    totalTaxPrice: {
-      type: DataTypes.DECIMAL(10, 2),
-      allowNull: false
+    path: {
+      type: DataTypes.STRING
     },
-    saleDate: {
-      type: DataTypes.DATEONLY,
-      allowNull: false
-    },
-    saleTime: {
-      type: DataTypes.TIME,
+    event: {
+      type: DataTypes.TEXT,
       allowNull: false
     },
     createdAt: {
@@ -60,7 +49,7 @@ module.exports = function (sequelize, DataTypes) {
     }
   }, {
     sequelize,
-    tableName: 'sales',
+    tableName: 'customer_trackings',
     timestamps: true,
     paranoid: true,
     indexes: [
@@ -73,42 +62,42 @@ module.exports = function (sequelize, DataTypes) {
         ]
       },
       {
-        name: 'sales_cartId_fk',
-        using: 'BTREE',
-        fields: [
-          { name: 'cartId' }
-        ]
-      },
-      {
-        name: 'sales_customerId_fk',
+        name: 'customer_trackings_customerId_fk',
         using: 'BTREE',
         fields: [
           { name: 'customerId' }
         ]
       },
       {
-        name: 'sales_paymentMethodId_fk',
+        name: 'customer_trackings_fingerprintId_fk',
         using: 'BTREE',
         fields: [
-          { name: 'paymentMethodId' }
+          { name: 'fingerprintId' }
         ]
       },
       {
-        name: 'sales_couponId_fk',
+        name: 'customer_trackings_localeSeoId_fk',
         using: 'BTREE',
         fields: [
-          { name: 'couponId' }
+          { name: 'localeSeoId' }
+        ]
+      },
+      {
+        name: 'customer_trackings_localeSeoSlugId_fk',
+        using: 'BTREE',
+        fields: [
+          { name: 'localeSeoSlugId' }
         ]
       }
     ]
   })
 
-  Sale.associate = function (models) {
-    Sale.belongsTo(models.Cart, { as: 'cart', foreignKey: 'cartId' })
-    Sale.belongsTo(models.Customer, { as: 'customer', foreignKey: 'customerId' })
-    Sale.belongsTo(models.PaymentMethod, { as: 'paymentMethod', foreignKey: 'paymentMethodId' })
-    Sale.belongsTo(models.Coupon, { as: 'coupon', foreignKey: 'couponId' })
+  CustomerTracking.associate = function (models) {
+    CustomerTracking.belongsTo(models.Customer, { as: 'customer', foreignKey: 'customerId' })
+    CustomerTracking.belongsTo(models.Fingerprint, { as: 'fingerprint', foreignKey: 'fingerprintId' })
+    CustomerTracking.belongsTo(models.LocaleSeo, { as: 'localeSeo', foreignKey: 'localeSeoId' })
+    CustomerTracking.belongsTo(models.LocaleSeoSlug, { as: 'localeSeoSlug', foreignKey: 'localeSeoSlugId' })
   }
 
-  return Sale
+  return CustomerTracking
 }

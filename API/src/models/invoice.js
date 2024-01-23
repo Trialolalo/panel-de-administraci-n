@@ -1,17 +1,28 @@
 module.exports = function (sequelize, DataTypes) {
-  const ProductCategoryRelation = sequelize.define('ProductCategoryRelation', {
+  const Invoice = sequelize.define('Invoice', {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
       allowNull: false
     },
-    productId: {
+    customerId: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    productCategoryId: {
+    saleId: {
       type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    returnId: {
+      type: DataTypes.INTEGER
+    },
+    reference: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    path: {
+      type: DataTypes.STRING,
       allowNull: false
     },
     createdAt: {
@@ -32,7 +43,7 @@ module.exports = function (sequelize, DataTypes) {
     }
   }, {
     sequelize,
-    tableName: 'product_category_relations',
+    tableName: 'invoices',
     timestamps: true,
     paranoid: true,
     indexes: [
@@ -45,26 +56,34 @@ module.exports = function (sequelize, DataTypes) {
         ]
       },
       {
-        name: 'product_category_relations_productId_fk',
+        name: 'invoices_customerId_fk',
         using: 'BTREE',
         fields: [
-          { name: 'productId' }
+          { name: 'customerId' }
         ]
       },
       {
-        name: 'product_category_relations_productCategoryId_fk',
+        name: 'invoices_saleId_fk',
         using: 'BTREE',
         fields: [
-          { name: 'productCategoryId' }
+          { name: 'saleId' }
+        ]
+      },
+      {
+        name: 'invoices_returnId_fk',
+        using: 'BTREE',
+        fields: [
+          { name: 'returnId' }
         ]
       }
     ]
   })
 
-  ProductCategoryRelation.associate = function (models) {
-    ProductCategoryRelation.belongsTo(models.Product, { as: 'product', foreignKey: 'productId' })
-    ProductCategoryRelation.belongsTo(models.ProductCategory, { as: 'productCategory', foreignKey: 'productCategoryId' })
+  Invoice.associate = function (models) {
+    Invoice.belongsTo(models.Customer, { as: 'customer', foreignKey: 'customerId' })
+    Invoice.belongsTo(models.Sale, { as: 'sale', foreignKey: 'saleId' })
+    Invoice.belongsTo(models.Return, { as: 'return', foreignKey: 'returnId' })
   }
 
-  return ProductCategoryRelation
+  return Invoice
 }

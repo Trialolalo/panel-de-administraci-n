@@ -1,18 +1,43 @@
 module.exports = function (sequelize, DataTypes) {
-  const ProductCategoryRelation = sequelize.define('ProductCategoryRelation', {
+  const LocaleSeoSlug = sequelize.define('LocaleSeoSlug', {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
       allowNull: false
     },
-    productId: {
+    localeSeoId: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    productCategoryId: {
+    languageAlias: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    relParent: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    slug: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    key: {
       type: DataTypes.INTEGER,
       allowNull: false
+    },
+    parentSlug: {
+      type: DataTypes.STRING
+    },
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    description: {
+      type: DataTypes.STRING
+    },
+    keywords: {
+      type: DataTypes.STRING
     },
     createdAt: {
       type: DataTypes.DATE,
@@ -32,7 +57,7 @@ module.exports = function (sequelize, DataTypes) {
     }
   }, {
     sequelize,
-    tableName: 'product_category_relations',
+    tableName: 'locale_seo_slugs',
     timestamps: true,
     paranoid: true,
     indexes: [
@@ -45,26 +70,18 @@ module.exports = function (sequelize, DataTypes) {
         ]
       },
       {
-        name: 'product_category_relations_productId_fk',
+        name: 'locale_seo_slugs_localeSeoId_fk',
         using: 'BTREE',
         fields: [
-          { name: 'productId' }
-        ]
-      },
-      {
-        name: 'product_category_relations_productCategoryId_fk',
-        using: 'BTREE',
-        fields: [
-          { name: 'productCategoryId' }
+          { name: 'localeSeoId' }
         ]
       }
     ]
   })
 
-  ProductCategoryRelation.associate = function (models) {
-    ProductCategoryRelation.belongsTo(models.Product, { as: 'product', foreignKey: 'productId' })
-    ProductCategoryRelation.belongsTo(models.ProductCategory, { as: 'productCategory', foreignKey: 'productCategoryId' })
+  LocaleSeoSlug.associate = function (models) {
+    LocaleSeoSlug.belongsTo(models.LocaleSeo, { as: 'localeSeo', foreignKey: 'localeSeoId' })
   }
 
-  return ProductCategoryRelation
+  return LocaleSeoSlug
 }

@@ -1,17 +1,29 @@
 module.exports = function (sequelize, DataTypes) {
-  const ProductCategoryRelation = sequelize.define('ProductCategoryRelation', {
+  const Ticket = sequelize.define('Ticket', {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
       allowNull: false
     },
-    productId: {
+    customerId: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    productCategoryId: {
+    saleId: {
       type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    returnId: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
+    reference: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    path: {
+      type: DataTypes.STRING,
       allowNull: false
     },
     createdAt: {
@@ -32,7 +44,7 @@ module.exports = function (sequelize, DataTypes) {
     }
   }, {
     sequelize,
-    tableName: 'product_category_relations',
+    tableName: 'tickets',
     timestamps: true,
     paranoid: true,
     indexes: [
@@ -45,26 +57,34 @@ module.exports = function (sequelize, DataTypes) {
         ]
       },
       {
-        name: 'product_category_relations_productId_fk',
+        name: 'tickets_customerId_fk',
         using: 'BTREE',
         fields: [
-          { name: 'productId' }
+          { name: 'customerId' }
         ]
       },
       {
-        name: 'product_category_relations_productCategoryId_fk',
+        name: 'tickets_saleId_fk',
         using: 'BTREE',
         fields: [
-          { name: 'productCategoryId' }
+          { name: 'saleId' }
+        ]
+      },
+      {
+        name: 'tickets_returnId_fk',
+        using: 'BTREE',
+        fields: [
+          { name: 'returnId' }
         ]
       }
     ]
   })
 
-  ProductCategoryRelation.associate = function (models) {
-    ProductCategoryRelation.belongsTo(models.Product, { as: 'product', foreignKey: 'productId' })
-    ProductCategoryRelation.belongsTo(models.ProductCategory, { as: 'productCategory', foreignKey: 'productCategoryId' })
+  Ticket.associate = function (models) {
+    Ticket.belongsTo(models.Customer, { as: 'customer', foreignKey: 'customerId' })
+    Ticket.belongsTo(models.Sale, { as: 'sale', foreignKey: 'saleId' })
+    Ticket.belongsTo(models.Return, { as: 'return', foreignKey: 'returnId' })
   }
 
-  return ProductCategoryRelation
+  return Ticket
 }

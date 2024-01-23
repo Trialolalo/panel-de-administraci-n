@@ -1,17 +1,21 @@
 module.exports = function (sequelize, DataTypes) {
-  const ProductCategoryRelation = sequelize.define('ProductCategoryRelation', {
+  const EmailError = sequelize.define('EmailError', {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
       allowNull: false
     },
-    productId: {
+    customerId: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    productCategoryId: {
+    emailId: {
       type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    error: {
+      type: DataTypes.TEXT,
       allowNull: false
     },
     createdAt: {
@@ -32,7 +36,7 @@ module.exports = function (sequelize, DataTypes) {
     }
   }, {
     sequelize,
-    tableName: 'product_category_relations',
+    tableName: 'email_errors',
     timestamps: true,
     paranoid: true,
     indexes: [
@@ -45,26 +49,26 @@ module.exports = function (sequelize, DataTypes) {
         ]
       },
       {
-        name: 'product_category_relations_productId_fk',
+        name: 'email_errors_customerId_fk',
         using: 'BTREE',
         fields: [
-          { name: 'productId' }
+          { name: 'customerId' }
         ]
       },
       {
-        name: 'product_category_relations_productCategoryId_fk',
+        name: 'email_errors_emailId_fk',
         using: 'BTREE',
         fields: [
-          { name: 'productCategoryId' }
+          { name: 'emailId' }
         ]
       }
     ]
   })
 
-  ProductCategoryRelation.associate = function (models) {
-    ProductCategoryRelation.belongsTo(models.Product, { as: 'product', foreignKey: 'productId' })
-    ProductCategoryRelation.belongsTo(models.ProductCategory, { as: 'productCategory', foreignKey: 'productCategoryId' })
+  EmailError.associate = function (models) {
+    EmailError.belongsTo(models.Customer, { as: 'customer', foreignKey: 'customerId' })
+    EmailError.belongsTo(models.Email, { as: 'email', foreignKey: 'emailId' })
   }
 
-  return ProductCategoryRelation
+  return EmailError
 }

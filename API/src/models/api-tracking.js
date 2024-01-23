@@ -1,45 +1,54 @@
 module.exports = function (sequelize, DataTypes) {
-  const Return = sequelize.define('Return', {
+  const ApiTracking = sequelize.define('ApiTracking', {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
       allowNull: false
     },
-    saleId: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
     customerId: {
-      type: DataTypes.INTEGER,
-      allowNull: false
+      type: DataTypes.INTEGER
     },
-    paymentMethodId: {
-      type: DataTypes.INTEGER,
-      allowNull: false
+    fingerprintId: {
+      type: DataTypes.INTEGER
     },
-    reference: {
+    ip: {
       type: DataTypes.STRING,
       allowNull: false
     },
-    totalPrice: {
-      type: DataTypes.DECIMAL(10, 2),
+    isRobot: {
+      type: DataTypes.BOOLEAN,
       allowNull: false
     },
-    totalBasePrice: {
-      type: DataTypes.DECIMAL(10, 2),
+    resource: {
+      type: DataTypes.STRING,
       allowNull: false
     },
-    totalTaxPrice: {
-      type: DataTypes.DECIMAL(10, 2),
+    resourceElement: {
+      type: DataTypes.INTEGER
+    },
+    method: {
+      allowNull: false,
+      type: DataTypes.STRING
+    },
+    httpCode: {
+      type: DataTypes.INTEGER,
       allowNull: false
     },
-    returnDate: {
-      type: DataTypes.DATEONLY,
+    message: {
+      type: DataTypes.TEXT,
+      allowNull: true
+    },
+    startTime: {
+      type: DataTypes.DOUBLE,
       allowNull: false
     },
-    returnTime: {
-      type: DataTypes.TIME,
+    endTime: {
+      type: DataTypes.DOUBLE,
+      allowNull: false
+    },
+    latencyMS: {
+      type: DataTypes.DOUBLE,
       allowNull: false
     },
     createdAt: {
@@ -60,7 +69,7 @@ module.exports = function (sequelize, DataTypes) {
     }
   }, {
     sequelize,
-    tableName: 'returns',
+    tableName: 'api_trackings',
     timestamps: true,
     paranoid: true,
     indexes: [
@@ -73,34 +82,26 @@ module.exports = function (sequelize, DataTypes) {
         ]
       },
       {
-        name: 'returns_saleId_fk',
-        using: 'BTREE',
-        fields: [
-          { name: 'saleId' }
-        ]
-      },
-      {
-        name: 'returns_customerId_fk',
+        name: 'api_trackings_customerId_fk',
         using: 'BTREE',
         fields: [
           { name: 'customerId' }
         ]
       },
       {
-        name: 'returns_paymentMethodId_fk',
+        name: 'api_trackings_fingerprintId_fk',
         using: 'BTREE',
         fields: [
-          { name: 'paymentMethodId' }
+          { name: 'fingerprintId' }
         ]
       }
     ]
   })
 
-  Return.associate = function (models) {
-    Return.belongsTo(models.Sale, { as: 'sale', foreignKey: 'saleId' })
-    Return.belongsTo(models.Customer, { as: 'customer', foreignKey: 'customerId' })
-    Return.belongsTo(models.PaymentMethod, { as: 'paymentMethod', foreignKey: 'paymentMethodId' })
+  ApiTracking.associate = function (models) {
+    ApiTracking.belongsTo(models.Customer, { as: 'customer', foreignKey: 'customerId' })
+    ApiTracking.belongsTo(models.Fingerprint, { as: 'fingerprint', foreignKey: 'fingerprintId' })
   }
 
-  return Return
+  return ApiTracking
 }

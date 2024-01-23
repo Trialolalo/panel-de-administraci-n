@@ -1,18 +1,19 @@
 module.exports = function (sequelize, DataTypes) {
-  const ProductCategoryRelation = sequelize.define('ProductCategoryRelation', {
+  const LocaleSeoSlugRedirect = sequelize.define('LocaleSeoSlugRedirect', {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
       allowNull: false
     },
-    productId: {
-      type: DataTypes.INTEGER,
-      allowNull: false
+    localeSeoSlugId: {
+      type: DataTypes.INTEGER
     },
-    productCategoryId: {
-      type: DataTypes.INTEGER,
-      allowNull: false
+    languageAlias: {
+      type: DataTypes.STRING
+    },
+    oldUrl: {
+      type: DataTypes.STRING
     },
     createdAt: {
       type: DataTypes.DATE,
@@ -32,7 +33,7 @@ module.exports = function (sequelize, DataTypes) {
     }
   }, {
     sequelize,
-    tableName: 'product_category_relations',
+    tableName: 'locale_seo_slug_redirects',
     timestamps: true,
     paranoid: true,
     indexes: [
@@ -45,26 +46,18 @@ module.exports = function (sequelize, DataTypes) {
         ]
       },
       {
-        name: 'product_category_relations_productId_fk',
+        name: 'locale_seo_slug_redirects_localeSeoId_fk',
         using: 'BTREE',
         fields: [
-          { name: 'productId' }
-        ]
-      },
-      {
-        name: 'product_category_relations_productCategoryId_fk',
-        using: 'BTREE',
-        fields: [
-          { name: 'productCategoryId' }
+          { name: 'localeSeoId' }
         ]
       }
     ]
   })
 
-  ProductCategoryRelation.associate = function (models) {
-    ProductCategoryRelation.belongsTo(models.Product, { as: 'product', foreignKey: 'productId' })
-    ProductCategoryRelation.belongsTo(models.ProductCategory, { as: 'productCategory', foreignKey: 'productCategoryId' })
+  LocaleSeoSlugRedirect.associate = function (models) {
+    LocaleSeoSlugRedirect.belongsTo(models.LocaleSeo, { as: 'localeSeo', foreignKey: 'localeSeoId' })
   }
 
-  return ProductCategoryRelation
+  return LocaleSeoSlugRedirect
 }

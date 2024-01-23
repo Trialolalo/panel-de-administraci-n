@@ -1,18 +1,29 @@
 module.exports = function (sequelize, DataTypes) {
-  const ProductCategoryRelation = sequelize.define('ProductCategoryRelation', {
+  const PriceDiscount = sequelize.define('PriceDiscount', {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
       allowNull: false
     },
-    productId: {
+    priceId: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    productCategoryId: {
-      type: DataTypes.INTEGER,
-      allowNull: false
+    percentage: {
+      type: DataTypes.DECIMAL
+    },
+    multiplier: {
+      type: DataTypes.DECIMAL
+    },
+    current: {
+      type: DataTypes.BOOLEAN
+    },
+    startsAt: {
+      type: DataTypes.DATE
+    },
+    endsAt: {
+      type: DataTypes.DATE
     },
     createdAt: {
       type: DataTypes.DATE,
@@ -32,7 +43,7 @@ module.exports = function (sequelize, DataTypes) {
     }
   }, {
     sequelize,
-    tableName: 'product_category_relations',
+    tableName: 'price_discounts',
     timestamps: true,
     paranoid: true,
     indexes: [
@@ -45,26 +56,18 @@ module.exports = function (sequelize, DataTypes) {
         ]
       },
       {
-        name: 'product_category_relations_productId_fk',
+        name: 'price_discounts_priceId_fk',
         using: 'BTREE',
         fields: [
-          { name: 'productId' }
-        ]
-      },
-      {
-        name: 'product_category_relations_productCategoryId_fk',
-        using: 'BTREE',
-        fields: [
-          { name: 'productCategoryId' }
+          { name: 'priceId' }
         ]
       }
     ]
   })
 
-  ProductCategoryRelation.associate = function (models) {
-    ProductCategoryRelation.belongsTo(models.Product, { as: 'product', foreignKey: 'productId' })
-    ProductCategoryRelation.belongsTo(models.ProductCategory, { as: 'productCategory', foreignKey: 'productCategoryId' })
+  PriceDiscount.associate = function (models) {
+    PriceDiscount.belongsTo(models.Price, { as: 'price', foreignKey: 'priceId' })
   }
 
-  return ProductCategoryRelation
+  return PriceDiscount
 }

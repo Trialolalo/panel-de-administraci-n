@@ -1,18 +1,29 @@
 module.exports = function (sequelize, DataTypes) {
-  const ProductCategoryRelation = sequelize.define('ProductCategoryRelation', {
+  const SaleError = sequelize.define('SaleError', {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
       allowNull: false
     },
-    productId: {
+    paymentMethodId: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    productCategoryId: {
+    customerId: {
       type: DataTypes.INTEGER,
       allowNull: false
+    },
+    cartId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    errorCode: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    errorMessage: {
+      type: DataTypes.STRING
     },
     createdAt: {
       type: DataTypes.DATE,
@@ -32,7 +43,7 @@ module.exports = function (sequelize, DataTypes) {
     }
   }, {
     sequelize,
-    tableName: 'product_category_relations',
+    tableName: 'sale_errors',
     timestamps: true,
     paranoid: true,
     indexes: [
@@ -45,26 +56,34 @@ module.exports = function (sequelize, DataTypes) {
         ]
       },
       {
-        name: 'product_category_relations_productId_fk',
+        name: 'sale_errors_paymentMethodId_fk',
         using: 'BTREE',
         fields: [
-          { name: 'productId' }
+          { name: 'paymentMethodId' }
         ]
       },
       {
-        name: 'product_category_relations_productCategoryId_fk',
+        name: 'sale_errors_customerId_fk',
         using: 'BTREE',
         fields: [
-          { name: 'productCategoryId' }
+          { name: 'customerId' }
+        ]
+      },
+      {
+        name: 'sale_errors_cartId_fk',
+        using: 'BTREE',
+        fields: [
+          { name: 'cartId' }
         ]
       }
     ]
   })
 
-  ProductCategoryRelation.associate = function (models) {
-    ProductCategoryRelation.belongsTo(models.Product, { as: 'product', foreignKey: 'productId' })
-    ProductCategoryRelation.belongsTo(models.ProductCategory, { as: 'productCategory', foreignKey: 'productCategoryId' })
+  SaleError.associate = function (models) {
+    SaleError.belongsTo(models.PaymentMethod, { as: 'paymentMethod', foreignKey: 'paymentMethodId' })
+    SaleError.belongsTo(models.Customer, { as: 'customer', foreignKey: 'customerId' })
+    SaleError.belongsTo(models.Cart, { as: 'cart', foreignKey: 'cartId' })
   }
 
-  return ProductCategoryRelation
+  return SaleError
 }

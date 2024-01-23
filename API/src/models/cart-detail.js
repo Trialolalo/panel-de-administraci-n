@@ -1,50 +1,47 @@
 module.exports = function (sequelize, DataTypes) {
-  const Customer = sequelize.define('Customer', {
+  const CartDetail = sequelize.define('CartDetail', {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
       allowNull: false
     },
-    countryId: {
+    cartId: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    cityId: {
+    productId: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    dialCodeId: {
+    localeId: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    name: {
+    priceId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    priceDiscountId: {
+      type: DataTypes.INTEGER
+    },
+    taxId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    productName: {
       type: DataTypes.STRING,
       allowNull: false
     },
-    surname: {
-      type: DataTypes.STRING,
+    basePrice: {
+      type: DataTypes.DECIMAL(6, 2),
       allowNull: false
     },
-    telephone: {
-      type: DataTypes.STRING,
-      allowNull: false
+    taxPrice: {
+      type: DataTypes.DECIMAL(6, 2)
     },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true
-    },
-    postalCode: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    address: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    password: {
-      type: DataTypes.STRING,
+    quantity: {
+      type: DataTypes.INTEGER,
       allowNull: false
     },
     createdAt: {
@@ -65,7 +62,7 @@ module.exports = function (sequelize, DataTypes) {
     }
   }, {
     sequelize,
-    tableName: 'customers',
+    tableName: 'cart_details',
     timestamps: true,
     paranoid: true,
     indexes: [
@@ -78,41 +75,50 @@ module.exports = function (sequelize, DataTypes) {
         ]
       },
       {
-        name: 'customers_email_index',
+        name: 'cart_details_cartId_fk',
         using: 'BTREE',
         fields: [
-          { name: 'email' }
+          { name: 'cartId' }
         ]
       },
       {
-        name: 'customers_countryId_fk',
+        name: 'cart_details_productId_fk',
         using: 'BTREE',
         fields: [
-          { name: 'countryId' }
+          { name: 'productId' }
         ]
       },
       {
-        name: 'customers_cityId_fk',
+        name: 'cart_details_localeId_fk',
         using: 'BTREE',
         fields: [
-          { name: 'cityId' }
+          { name: 'localeId' }
         ]
       },
       {
-        name: 'customers_dialCodeId_fk',
+        name: 'cart_details_priceId_fk',
         using: 'BTREE',
         fields: [
-          { name: 'dialCodeId' }
+          { name: 'priceId' }
+        ]
+      },
+      {
+        name: 'cart_details_taxId_fk',
+        using: 'BTREE',
+        fields: [
+          { name: 'taxId' }
         ]
       }
     ]
   })
 
-  Customer.associate = function (models) {
-    Customer.belongsTo(models.Country, { as: 'country', foreignKey: 'countryId' })
-    Customer.belongsTo(models.City, { as: 'city', foreignKey: 'cityId' })
-    Customer.belongsTo(models.DialCode, { as: 'dialCode', foreignKey: 'dialCodeId' })
+  CartDetail.associate = function (models) {
+    CartDetail.belongsTo(models.Cart, { as: 'cart', foreignKey: 'cartId' })
+    CartDetail.belongsTo(models.Product, { as: 'product', foreignKey: 'productId' })
+    CartDetail.belongsTo(models.Locale, { as: 'locale', foreignKey: 'localeId' })
+    CartDetail.belongsTo(models.Price, { as: 'price', foreignKey: 'priceId' })
+    CartDetail.belongsTo(models.Tax, { as: 'tax', foreignKey: 'taxId' })
   }
 
-  return Customer
+  return CartDetail
 }

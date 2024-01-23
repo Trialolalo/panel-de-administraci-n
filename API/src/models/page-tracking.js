@@ -1,50 +1,45 @@
 module.exports = function (sequelize, DataTypes) {
-  const Customer = sequelize.define('Customer', {
+  const PageTracking = sequelize.define('PageTracking', {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
       allowNull: false
     },
-    countryId: {
+    customerId: {
+      type: DataTypes.INTEGER
+    },
+    fingerprintId: {
+      type: DataTypes.INTEGER
+    },
+    localeSeoId: {
+      type: DataTypes.INTEGER
+    },
+    localeSeoSlugId: {
+      type: DataTypes.INTEGER
+    },
+    path: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    ip: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    isRobot: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false
+    },
+    startTime: {
+      type: DataTypes.DOUBLE,
+      allowNull: false
+    },
+    endTime: {
+      type: DataTypes.DOUBLE,
+      allowNull: false
+    },
+    latencyMS: {
       type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    cityId: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    dialCodeId: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    surname: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    telephone: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true
-    },
-    postalCode: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    address: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    password: {
-      type: DataTypes.STRING,
       allowNull: false
     },
     createdAt: {
@@ -65,7 +60,7 @@ module.exports = function (sequelize, DataTypes) {
     }
   }, {
     sequelize,
-    tableName: 'customers',
+    tableName: 'page_trackings',
     timestamps: true,
     paranoid: true,
     indexes: [
@@ -78,41 +73,42 @@ module.exports = function (sequelize, DataTypes) {
         ]
       },
       {
-        name: 'customers_email_index',
+        name: 'page_trackings_customerId_fk',
         using: 'BTREE',
         fields: [
-          { name: 'email' }
+          { name: 'customerId' }
         ]
       },
       {
-        name: 'customers_countryId_fk',
+        name: 'page_trackings_fingerprintId_fk',
         using: 'BTREE',
         fields: [
-          { name: 'countryId' }
+          { name: 'fingerprintId' }
         ]
       },
       {
-        name: 'customers_cityId_fk',
+        name: 'page_trackings_localeSeoId_fk',
         using: 'BTREE',
         fields: [
-          { name: 'cityId' }
+          { name: 'localeSeoId' }
         ]
       },
       {
-        name: 'customers_dialCodeId_fk',
+        name: 'page_trackings_localeSeoSlugId_fk',
         using: 'BTREE',
         fields: [
-          { name: 'dialCodeId' }
+          { name: 'localeSeoSlugId' }
         ]
       }
     ]
   })
 
-  Customer.associate = function (models) {
-    Customer.belongsTo(models.Country, { as: 'country', foreignKey: 'countryId' })
-    Customer.belongsTo(models.City, { as: 'city', foreignKey: 'cityId' })
-    Customer.belongsTo(models.DialCode, { as: 'dialCode', foreignKey: 'dialCodeId' })
+  PageTracking.associate = function (models) {
+    PageTracking.belongsTo(models.Customer, { as: 'customer', foreignKey: 'customerId' })
+    PageTracking.belongsTo(models.Fingerprint, { as: 'fingerprint', foreignKey: 'fingerprintId' })
+    PageTracking.belongsTo(models.LocaleSeo, { as: 'localeSeo', foreignKey: 'localeSeoId' })
+    PageTracking.belongsTo(models.LocaleSeoSlug, { as: 'localeSeoSlug', foreignKey: 'localeSeoSlugId' })
   }
 
-  return Customer
+  return PageTracking
 }

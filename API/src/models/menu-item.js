@@ -1,46 +1,41 @@
 module.exports = function (sequelize, DataTypes) {
-  const Return = sequelize.define('Return', {
+  const MenuItem = sequelize.define('MenuItem', {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
       allowNull: false
     },
-    saleId: {
+    menuId: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    customerId: {
-      type: DataTypes.INTEGER,
-      allowNull: false
+    localeSeoId: {
+      type: DataTypes.INTEGER
     },
-    paymentMethodId: {
-      type: DataTypes.INTEGER,
-      allowNull: false
+    localeSeoSlugId: {
+      type: DataTypes.INTEGER
     },
-    reference: {
+    parent: {
+      type: DataTypes.INTEGER
+    },
+    name: {
       type: DataTypes.STRING,
       allowNull: false
     },
-    totalPrice: {
-      type: DataTypes.DECIMAL(10, 2),
+    description: {
+      type: DataTypes.STRING
+    },
+    customUrl: {
+      type: DataTypes.STRING
+    },
+    private: {
+      type: DataTypes.BOOLEAN,
       allowNull: false
     },
-    totalBasePrice: {
-      type: DataTypes.DECIMAL(10, 2),
-      allowNull: false
-    },
-    totalTaxPrice: {
-      type: DataTypes.DECIMAL(10, 2),
-      allowNull: false
-    },
-    returnDate: {
-      type: DataTypes.DATEONLY,
-      allowNull: false
-    },
-    returnTime: {
-      type: DataTypes.TIME,
-      allowNull: false
+    order: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0
     },
     createdAt: {
       type: DataTypes.DATE,
@@ -60,7 +55,7 @@ module.exports = function (sequelize, DataTypes) {
     }
   }, {
     sequelize,
-    tableName: 'returns',
+    tableName: 'menu_items',
     timestamps: true,
     paranoid: true,
     indexes: [
@@ -73,34 +68,34 @@ module.exports = function (sequelize, DataTypes) {
         ]
       },
       {
-        name: 'returns_saleId_fk',
+        name: 'menu_items_menuId_fk',
         using: 'BTREE',
         fields: [
-          { name: 'saleId' }
+          { name: 'menuId' }
         ]
       },
       {
-        name: 'returns_customerId_fk',
+        name: 'menu_items_localeSeoId_fk',
         using: 'BTREE',
         fields: [
-          { name: 'customerId' }
+          { name: 'localeSeoId' }
         ]
       },
       {
-        name: 'returns_paymentMethodId_fk',
+        name: 'menu_items_localeSeoSlugId_fk',
         using: 'BTREE',
         fields: [
-          { name: 'paymentMethodId' }
+          { name: 'localeSeoSlugId' }
         ]
       }
     ]
   })
 
-  Return.associate = function (models) {
-    Return.belongsTo(models.Sale, { as: 'sale', foreignKey: 'saleId' })
-    Return.belongsTo(models.Customer, { as: 'customer', foreignKey: 'customerId' })
-    Return.belongsTo(models.PaymentMethod, { as: 'paymentMethod', foreignKey: 'paymentMethodId' })
+  MenuItem.associate = function (models) {
+    MenuItem.belongsTo(models.Menu, { as: 'menu', foreignKey: 'menuId' })
+    MenuItem.belongsTo(models.LocaleSeo, { as: 'localeSeo', foreignKey: 'localeSeoId' })
+    MenuItem.belongsTo(models.LocaleSeoSlug, { as: 'localeSeoSlug', foreignKey: 'localeSeoSlugId' })
   }
 
-  return Return
+  return MenuItem
 }

@@ -1,18 +1,29 @@
 module.exports = function (sequelize, DataTypes) {
-  const ProductCategoryRelation = sequelize.define('ProductCategoryRelation', {
+  const LocaleSeoRedirect = sequelize.define('LocaleSeoRedirect', {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
       allowNull: false
     },
-    productId: {
-      type: DataTypes.INTEGER,
+    localeSeoId: {
+      type: DataTypes.INTEGER
+    },
+    languageAlias: {
+      type: DataTypes.STRING,
       allowNull: false
     },
-    productCategoryId: {
-      type: DataTypes.INTEGER,
-      allowNull: false
+    group: {
+      type: DataTypes.STRING
+    },
+    key: {
+      type: DataTypes.STRING
+    },
+    subdomain: {
+      type: DataTypes.STRING
+    },
+    oldUrl: {
+      type: DataTypes.STRING
     },
     createdAt: {
       type: DataTypes.DATE,
@@ -32,7 +43,7 @@ module.exports = function (sequelize, DataTypes) {
     }
   }, {
     sequelize,
-    tableName: 'product_category_relations',
+    tableName: 'locale_seo_redirects',
     timestamps: true,
     paranoid: true,
     indexes: [
@@ -45,26 +56,26 @@ module.exports = function (sequelize, DataTypes) {
         ]
       },
       {
-        name: 'product_category_relations_productId_fk',
+        name: 'sale_details_saleId_fk',
         using: 'BTREE',
         fields: [
-          { name: 'productId' }
+          { name: 'saleId' }
         ]
       },
       {
-        name: 'product_category_relations_productCategoryId_fk',
+        name: 'locale_seo_redirects_localeSeoId_fk',
         using: 'BTREE',
         fields: [
-          { name: 'productCategoryId' }
+          { name: 'localeSeoId' }
         ]
       }
     ]
   })
 
-  ProductCategoryRelation.associate = function (models) {
-    ProductCategoryRelation.belongsTo(models.Product, { as: 'product', foreignKey: 'productId' })
-    ProductCategoryRelation.belongsTo(models.ProductCategory, { as: 'productCategory', foreignKey: 'productCategoryId' })
+  LocaleSeoRedirect.associate = function (models) {
+    LocaleSeoRedirect.belongsTo(models.Sale, { as: 'sale', foreignKey: 'saleId' })
+    LocaleSeoRedirect.belongsTo(models.LocaleSeo, { as: 'localeSeo', foreignKey: 'localeSeoId' })
   }
 
-  return ProductCategoryRelation
+  return LocaleSeoRedirect
 }

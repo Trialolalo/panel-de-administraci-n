@@ -1,17 +1,25 @@
 module.exports = function (sequelize, DataTypes) {
-  const ProductCategoryRelation = sequelize.define('ProductCategoryRelation', {
+  const AdminTracking = sequelize.define('AdminTracking', {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
       allowNull: false
     },
-    productId: {
+    userId: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    productCategoryId: {
+    entity: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    entityId: {
       type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    action: {
+      type: DataTypes.STRING,
       allowNull: false
     },
     createdAt: {
@@ -32,7 +40,7 @@ module.exports = function (sequelize, DataTypes) {
     }
   }, {
     sequelize,
-    tableName: 'product_category_relations',
+    tableName: 'admin_trackings',
     timestamps: true,
     paranoid: true,
     indexes: [
@@ -45,26 +53,26 @@ module.exports = function (sequelize, DataTypes) {
         ]
       },
       {
-        name: 'product_category_relations_productId_fk',
+        name: 'admin_trackings_userId_fk',
         using: 'BTREE',
         fields: [
-          { name: 'productId' }
+          { name: 'userId' }
         ]
       },
       {
-        name: 'product_category_relations_productCategoryId_fk',
+        name: 'admin_trackings_entity_entityId_index',
         using: 'BTREE',
         fields: [
-          { name: 'productCategoryId' }
+          { name: 'entity' },
+          { name: 'entityId' }
         ]
       }
     ]
   })
 
-  ProductCategoryRelation.associate = function (models) {
-    ProductCategoryRelation.belongsTo(models.Product, { as: 'product', foreignKey: 'productId' })
-    ProductCategoryRelation.belongsTo(models.ProductCategory, { as: 'productCategory', foreignKey: 'productCategoryId' })
+  AdminTracking.associate = function (models) {
+    AdminTracking.belongsTo(models.User, { as: 'user', foreignKey: 'userId' })
   }
 
-  return ProductCategoryRelation
+  return AdminTracking
 }
