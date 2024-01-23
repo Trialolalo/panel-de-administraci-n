@@ -67,6 +67,7 @@ module.exports = function (sequelize, DataTypes) {
 
   PriceDiscount.associate = function (models) {
     PriceDiscount.belongsTo(models.Price, { as: 'price', foreignKey: 'priceId' })
+    PriceDiscount.hasMany(models.CartDetail, { as: 'cartDetails', foreignKey: 'priceDiscountId' })
   }
 
   return PriceDiscount

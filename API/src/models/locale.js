@@ -70,7 +70,7 @@ module.exports = function (sequelize, DataTypes) {
   })
 
   Locale.associate = function (models) {
-
+    Locale.hasMany(models.CartDetail, { as: 'cartDetails', foreignKey: 'localeId' })
   }
 
   return Locale
