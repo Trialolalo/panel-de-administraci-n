@@ -1,5 +1,5 @@
 module.exports = function (sequelize, DataTypes) {
-  const PaymentMethod = sequelize.define('PaymentMethod', {
+  const ImageConfiguration = sequelize.define('ImageConfiguration', {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
@@ -57,9 +57,9 @@ module.exports = function (sequelize, DataTypes) {
     ]
   })
 
-  PaymentMethod.associate = function (models) {
-
+  ImageConfiguration.associate = function (models) {
+    ImageConfiguration.hasMany(models.Image, { as: 'images', foreignKey: 'imageConfigurationId' })
   }
 
-  return PaymentMethod
+  return ImageConfiguration
 }
