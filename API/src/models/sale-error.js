@@ -8,11 +8,21 @@ module.exports = function (sequelize, DataTypes) {
     },
     paymentMethodId: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Por favor, rellena el campo "Método de pago".'
+        }
+      }
     },
     customerId: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Por favor, rellena el campo "Cliente".'
+        }
+      }
     },
     cartId: {
       type: DataTypes.INTEGER,
@@ -20,7 +30,12 @@ module.exports = function (sequelize, DataTypes) {
     },
     errorCode: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Por favor, rellena el campo "Código de Error".'
+        }
+      }
     },
     errorMessage: {
       type: DataTypes.STRING

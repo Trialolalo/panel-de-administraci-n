@@ -12,7 +12,12 @@ module.exports = function (sequelize, DataTypes) {
     },
     languageAlias: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Por favor, rellena el campo "Alias de idioma".'
+        }
+      }
     },
     relParent: {
       type: DataTypes.STRING,
@@ -31,7 +36,12 @@ module.exports = function (sequelize, DataTypes) {
     },
     title: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Por favor, rellena el campo "Título".'
+        }
+      }
     },
     description: {
       type: DataTypes.STRING

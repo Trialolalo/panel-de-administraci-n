@@ -8,7 +8,12 @@ module.exports = function (sequelize, DataTypes) {
     },
     menuId: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Por favor, rellena el campo "Menu".'
+        }
+      }
     },
     localeSeoId: {
       type: DataTypes.INTEGER

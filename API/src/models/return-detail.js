@@ -31,7 +31,12 @@ module.exports = function (sequelize, DataTypes) {
     },
     productName: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Por favor, rellena el campo "Nombre del Producto".'
+        }
+      }
     },
     basePrice: {
       type: DataTypes.DECIMAL(6, 2),

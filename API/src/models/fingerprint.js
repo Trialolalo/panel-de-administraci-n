@@ -11,7 +11,12 @@ module.exports = function (sequelize, DataTypes) {
     },
     cityId: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Por favor, rellena el campo "Ciudad".'
+        }
+      }
     },
     fingerprint: {
       type: DataTypes.STRING,
@@ -19,27 +24,57 @@ module.exports = function (sequelize, DataTypes) {
     },
     browser: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Por favor, rellena el campo "Navegador".'
+        }
+      }
     },
     browserVersion: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Por favor, rellena el campo "Versión del Navegador".'
+        }
+      }
     },
     os: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Por favor, rellena el campo "Sistema operativo".'
+        }
+      }
     },
     osVersion: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Por favor, rellena el campo "Versión del sistema opetarivo".'
+        }
+      }
     },
     screenHeight: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Por favor, rellena el campo "Altura de pantalla".'
+        }
+      }
     },
     screenWidth: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Por favor, rellena el campo "Anchura de pantalla".'
+        }
+      }
     },
     createdAt: {
       type: DataTypes.DATE,

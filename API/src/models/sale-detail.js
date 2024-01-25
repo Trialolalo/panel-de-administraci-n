@@ -31,11 +31,21 @@ module.exports = function (sequelize, DataTypes) {
     },
     productName: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Por favor, rellena el campo "Nombre del Producto".'
+        }
+      }
     },
     basePrice: {
       type: DataTypes.DECIMAL(6, 2),
-      allowNull: false
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Por favor, rellena el campo "Precio Base".'
+        }
+      }
     },
     taxPrice: {
       type: DataTypes.DECIMAL(6, 2),
@@ -43,7 +53,12 @@ module.exports = function (sequelize, DataTypes) {
     },
     quantity: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Por favor, rellena el campo "Cantidad".'
+        }
+      }
     },
     createdAt: {
       type: DataTypes.DATE,

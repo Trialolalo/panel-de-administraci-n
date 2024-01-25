@@ -12,7 +12,12 @@ module.exports = function (sequelize, DataTypes) {
     },
     productId: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Por favor, rellena el campo "Producto".'
+        }
+      }
     },
     localeId: {
       type: DataTypes.INTEGER,
@@ -20,7 +25,12 @@ module.exports = function (sequelize, DataTypes) {
     },
     priceId: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Por favor, rellena el campo "Precio".'
+        }
+      }
     },
     priceDiscountId: {
       type: DataTypes.INTEGER
@@ -31,7 +41,12 @@ module.exports = function (sequelize, DataTypes) {
     },
     productName: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Por favor, rellena el campo "Nombre del producto".'
+        }
+      }
     },
     basePrice: {
       type: DataTypes.DECIMAL(6, 2),
@@ -42,7 +57,12 @@ module.exports = function (sequelize, DataTypes) {
     },
     quantity: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Por favor, rellena el campo "Cantidad".'
+        }
+      }
     },
     createdAt: {
       type: DataTypes.DATE,

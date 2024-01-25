@@ -8,11 +8,21 @@ module.exports = function (sequelize, DataTypes) {
     },
     countryId: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Por favor, rellena el campo "País".'
+        }
+      }
     },
     dialCode: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Por favor, rellena el campo "Prefijo telefónico".'
+        }
+      }
     },
     createdAt: {
       type: DataTypes.DATE,

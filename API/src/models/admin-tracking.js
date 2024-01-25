@@ -8,7 +8,12 @@ module.exports = function (sequelize, DataTypes) {
     },
     userId: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Por favor, rellena el campo "Usuario".'
+        }
+      }
     },
     entity: {
       type: DataTypes.STRING,
