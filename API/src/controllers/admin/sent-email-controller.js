@@ -19,7 +19,7 @@ exports.findAll = (req, res) => {
   const offset = (page - 1) * limit
 
   SentEmail.findAndCountAll({
-    attributes: ['id', 'recipient', 'subject', 'body', 'sentAt'],
+    attributes: ['id', 'customerId', 'emailId', 'createdAt', 'updatedAt'],
     limit,
     offset,
     order: [['sentAt', 'DESC']]
@@ -44,7 +44,7 @@ exports.findOne = (req, res) => {
   const id = req.params.id
 
   SentEmail.findByPk(id, {
-    attributes: ['id', 'recipient', 'subject', 'body', 'sentAt']
+    attributes: ['id', 'customerId', 'emailId', 'createdAt', 'updatedAt']
   })
     .then(data => {
       if (data) {

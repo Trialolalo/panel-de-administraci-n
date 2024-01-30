@@ -19,7 +19,7 @@ exports.findAll = async (req, res) => {
 
   try {
     const result = await LocaleSeoSlug.findAndCountAll({
-      attributes: ['id', 'slug', 'isActive', 'localeId', 'seoId'],
+      attributes: ['id', 'slug', 'key', 'title', 'keywords', 'createdAt', 'updatedAt'],
       limit,
       offset,
       order: [['createdAt', 'DESC']]
@@ -44,7 +44,7 @@ exports.findOne = async (req, res) => {
 
   try {
     const localeSeoSlug = await LocaleSeoSlug.findByPk(id, {
-      attributes: ['id', 'slug', 'isActive', 'localeId', 'seoId']
+      attributes: ['id', 'slug', 'key', 'title', 'keywords', 'createdAt', 'updatedAt']
     })
 
     if (localeSeoSlug) {

@@ -19,7 +19,7 @@ exports.findAll = (req, res) => {
   const offset = (page - 1) * limit
 
   Invoice.findAndCountAll({
-    attributes: ['id', 'customer', 'totalAmount', 'dueDate', 'status'],
+    attributes: ['id', 'reference', 'createdAt', 'updatedAt'],
     limit,
     offset,
     order: [['createdAt', 'DESC']]

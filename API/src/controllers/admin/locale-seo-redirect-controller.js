@@ -19,7 +19,7 @@ exports.findAll = (req, res) => {
   const offset = (page - 1) * limit
 
   LocaleSeoRedirect.findAndCountAll({
-    attributes: ['id', 'fromPath', 'toPath'], // Agregar los atributos deseados aquí
+    attributes: ['id', 'languageAlias', 'group', 'key', 'subdomain', 'createdAt', 'updatedAt'],
     limit,
     offset,
     order: [['createdAt', 'DESC']]
@@ -44,7 +44,7 @@ exports.findOne = (req, res) => {
   const id = req.params.id
 
   LocaleSeoRedirect.findByPk(id, {
-    attributes: ['id', 'fromPath', 'toPath'] // Agregar los atributos deseados aquí
+    attributes: ['id', 'languageAlias', 'group', 'key', 'subdomain', 'createdAt', 'updatedAt']
   })
     .then(data => {
       if (data) {

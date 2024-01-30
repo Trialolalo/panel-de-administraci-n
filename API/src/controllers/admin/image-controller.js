@@ -19,7 +19,7 @@ exports.findAll = (req, res) => {
   const offset = (page - 1) * limit
 
   Image.findAndCountAll({
-    attributes: ['id', 'url', 'description'],
+    attributes: ['id', 'entity', 'name', 'title', 'languageAlias', 'createdAt', 'updatedAt'],
     limit,
     offset,
     order: [['createdAt', 'DESC']]
@@ -44,7 +44,7 @@ exports.findOne = (req, res) => {
   const id = req.params.id
 
   Image.findByPk(id, {
-    attributes: ['id', 'url', 'description']
+    attributes: ['id', 'entity', 'name', 'title', 'languageAlias', 'description']
   })
     .then(data => {
       if (data) {

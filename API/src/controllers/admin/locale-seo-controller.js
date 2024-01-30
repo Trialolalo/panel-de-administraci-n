@@ -19,6 +19,7 @@ exports.findAll = (req, res) => {
   const offset = (page - 1) * limit
 
   LocaleSeo.findAndCountAll({
+    attributes: ['id', 'languageAlias', 'title', 'menu', 'priority', 'createdAt', 'updatedAt'],
     limit,
     offset,
     order: [['createdAt', 'DESC']]
