@@ -17,7 +17,7 @@ exports.findAll = (req, res) => {
   const offset = (page - 1) * limit
 
   SocialNetwork.findAndCountAll({
-    attributes: ['id', 'name', 'url'],
+    attributes: ['id', 'name', 'baseUrl', 'createdAt', 'updatedAt'],
     limit,
     offset,
     order: [['createdAt', 'DESC']]

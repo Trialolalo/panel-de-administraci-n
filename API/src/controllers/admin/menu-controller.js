@@ -17,7 +17,7 @@ exports.findAll = (req, res) => {
   const offset = (page - 1) * limit
 
   Menu.findAndCountAll({
-    attributes: ['id', 'createdAt', 'updatedAt'],
+    attributes: ['id', 'name', 'createdAt', 'updatedAt'],
     limit,
     offset,
     order: [['createdAt', 'DESC']]

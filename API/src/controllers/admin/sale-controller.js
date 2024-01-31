@@ -17,7 +17,7 @@ exports.findAll = (req, res) => {
   const offset = (page - 1) * limit
 
   Sale.findAndCountAll({
-    attributes: ['id', 'productId', 'quantity', 'price', 'total'],
+    attributes: ['id', 'customerId', 'paymentMethodId', 'couponId', 'totalPrice', 'saleDate', 'saleTime', 'createdAt', 'updatedAt'],
     limit,
     offset,
     order: [['createdAt', 'DESC']]

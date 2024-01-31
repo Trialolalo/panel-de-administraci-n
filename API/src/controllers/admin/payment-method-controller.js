@@ -17,7 +17,7 @@ exports.findAll = (req, res) => {
   const offset = (page - 1) * limit
 
   PaymentMethod.findAndCountAll({
-    attributes: ['id', 'name', 'description'],
+    attributes: ['id', 'name', 'configuration', 'createdAt', 'updatedAt'],
     limit,
     offset,
     order: [['createdAt', 'DESC']]

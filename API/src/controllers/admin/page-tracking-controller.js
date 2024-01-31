@@ -19,7 +19,7 @@ exports.findAll = (req, res) => {
   const offset = (page - 1) * limit
 
   PageTracking.findAndCountAll({
-    attributes: ['id', 'url', 'visitorId', 'createdAt'],
+    attributes: ['id', 'ip', 'isRobot', 'customerId', 'startTime', 'endTime', 'createdAt', 'updatedAt'],
     limit,
     offset,
     order: [['createdAt', 'DESC']]
@@ -44,7 +44,7 @@ exports.findOne = (req, res) => {
   const id = req.params.id
 
   PageTracking.findByPk(id, {
-    attributes: ['id', 'url', 'visitorId', 'createdAt']
+    attributes: ['id', 'ip', 'isRobot', 'customerId', 'startTime', 'endTime', 'createdAt', 'updatedAt']
   })
     .then(data => {
       if (data) {

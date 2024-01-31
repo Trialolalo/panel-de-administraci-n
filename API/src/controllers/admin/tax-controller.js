@@ -17,7 +17,7 @@ exports.findAll = (req, res) => {
   const offset = (page - 1) * limit
 
   Tax.findAndCountAll({
-    attributes: ['id', 'name', 'rate'],
+    attributes: ['id', 'countryId', 'rate', 'multiplier', 'createdAt', 'updatedAt'],
     limit,
     offset,
     order: [['createdAt', 'DESC']]
