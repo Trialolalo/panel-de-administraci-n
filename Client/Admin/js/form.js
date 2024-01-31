@@ -165,13 +165,13 @@ class Form extends HTMLElement {
             }
 
             .tab-content{
-            visibility: hidden;
-            display: none;
+                visibility: hidden;
+                display: none;
             }
 
             .tab-content.active{
-            visibility: visible;
-            display: block;
+                visibility: visible;
+                display: block;
             }
 
         </style>
@@ -250,7 +250,66 @@ class Form extends HTMLElement {
                             </div>
                         </div>
                     </div>
+                    <div class="tabs">
+                        <div class="tab-selector">
+                            <div class="tab active" data-tab="es">
+                                <button event= prevent>
+                                    es
+                                </button>
+                            </div>
+                            <div class="tab" data-tab="en">            
+                                <button>
+                                    en
+                                </button>
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="tab-content active" data-tab="es">
+                        <div class="form-element">
+                            <div class="form-element-label">
+                                <label>
+                                    Título
+                                </label>
+                            </div>
+                            <div class="form-element-input">
+                                <input class="validate" type="text" name="español"/>
+                            </div>
+                        </div>
+                        <div class="form-element">
+                            <div class="form-element-label">
+                                <label>
+                                    Descripción
+                                </label>
+                            </div>
+                            <div class="form-element-input">
+                                <textarea></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-content" data-tab="en">
+                        <div class="form-element">
+                            <div class="form-element-label">
+                                <label>
+                                    Title
+                                </label>
+                            </div>
+                            <div class="form-element-input">
+                                <input class="validate" type="text" name="ingles"/>
+                            </div>
+                        </div>
+                        <div class="form-element">
+                            <div class="form-element-label">
+                                <label>
+                                    Description
+                                </label>
+                            </div>
+                            <div class="form-element-input">
+                                <textarea></textarea>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+                
                 <div class="tab-content" data-tab="images">
                     <div class="form-row">
                         <div class="form-element">
@@ -260,7 +319,7 @@ class Form extends HTMLElement {
                                 </label>
                             </div>
                             <div class="form-element-input">
-                                <input type="file" />
+                                <input type="file"/>
                             </div>
                         </div>
                     </div>
@@ -268,20 +327,6 @@ class Form extends HTMLElement {
             </form>
         </section>            
       `
-
-    const tabSelector = this.shadow.querySelector('.tab-selector')
-    const tabContents = this.shadow.querySelectorAll('.tab-content')
-
-    tabSelector.addEventListener('click', async (event) => {
-      if (event.target.closest('.tab')) {
-        const tab = event.target.closest('.tab')
-        tab.parentElement.querySelector('.active').classList.remove('active')
-        tab.classList.add('active')
-
-        tab.closest('section').querySelector('.tab-content.active').classList.remove('active')
-        tab.closest('section').querySelector(`.tab-content[data-tab="${tab.dataset.tab}"]`).classList.add('active')
-      }
-    })
 
     const form = this.shadow.querySelector('.form')
 
@@ -295,7 +340,7 @@ class Form extends HTMLElement {
           if (text.length < validate.dataset.minlength) {
             validate.classList.add('active')
 
-            if (text.length == 0) {
+            if (text.length === 0) {
               validate.classList.remove('active')
             }
           } else {
@@ -306,23 +351,36 @@ class Form extends HTMLElement {
         if (validate.dataset.onlyletters) {
           event.target.value = event.target.value.replace(/[^A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]/g, '')
         }
-
-        if (validate.dataset.mail) {
-          const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-        }
       }
     })
 
-    const notificationButton = this.shadow.querySelector('.form-save-button')
-    const notification = this.shadow.querySelector('.notification')
+    // const notificationButton = this.shadow.querySelector('.form-save-button')
+    // const notification = this.shadow.querySelector('.notification')
 
-    notificationButton.addEventListener('click', () => {
-      notification.classList.toggle('active')
-      notificationButton.classList.toggle('active')
+    // notificationButton.addEventListener('click', () => {
+    //   notification.classList.toggle('active')
+    //   notificationButton.classList.toggle('active')
 
-      setTimeout(() => {
-        notification.classList.remove('active')
-      }, 2500)
+    //   setTimeout(() => {
+    //     notification.classList.remove('active')
+    //   }, 2500)
+    // })
+
+    form.addEventListener('click', (event) => {
+      if (event.target.closest('.tab')) {
+        if (event.target.closest('.tab').classList.contains('active')) {
+          return
+        }
+
+        const tabClicked = event.target.closest('.tab')
+        const tabActive = tabClicked.parentElement.querySelector('.active')
+
+        tabClicked.classList.add('active')
+        tabActive.classList.remove('active')
+        event.preventDefault()
+        tabClicked.closest('section').querySelector(`.tab-content.active[data-tab="${tabActive.dataset.tab}"]`).classList.remove('active')
+        tabClicked.closest('section').querySelector(`.tab-content[data-tab="${tabClicked.dataset.tab}"]`).classList.add('active')
+      }
     })
   }
 }
