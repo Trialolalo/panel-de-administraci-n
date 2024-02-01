@@ -141,29 +141,6 @@ class Form extends HTMLElement {
                 fill: hsl(225, 54%, 33%);
             }
 
-            .notification{
-                background: hsl(225, 54%, 33%);;
-                height: 8vh;
-                width: 30vh;
-                bottom: 10vh;
-                position: fixed;
-                right: -100vh;
-                z-index: 1003;
-                padding: 1rem;
-                transition: right 0.5s ease-in-out;
-            }
-
-            .notification.active{
-                right: 0;
-                transition: right 0.5s;
-            }
-
-            .notification h3{
-                color: hsl(0, 0%, 100%);
-                font-family: 'Roboto Condensed', sans-serif;
-                font-weight: 400;
-            }
-
             .tab-content{
                 visibility: hidden;
                 display: none;
@@ -173,10 +150,8 @@ class Form extends HTMLElement {
                 visibility: visible;
                 display: block;
             }
-
         </style>
   
-      
         <section class="form">
             <div class="tabs">
                 <div class="tab-selector">
@@ -210,7 +185,7 @@ class Form extends HTMLElement {
                         <div class="form-element">
                             <div class="form-element-label">
                                 <label>
-                                    Nombre
+                                    Pregunta
                                 </label>
                             </div>
                             <div class="form-element-input">
@@ -220,33 +195,11 @@ class Form extends HTMLElement {
                         <div class="form-element">
                             <div class="form-element-label">
                                 <label>
-                                    Email
+                                    Respuesta
                                 </label>
                             </div>
                             <div class="form-element-input">
                                 <input class="validate" data-mail="true" name="submitted-name" autocomplete="name" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-element">
-                            <div class="form-element-label">
-                                <label>
-                                    Password
-                                </label>
-                            </div>
-                            <div class="form-element-input">
-                                <input class="validate" data-minlength="8" type="password" name="submitted-name" autocomplete="name" />
-                            </div>
-                        </div>
-                        <div class="form-element">
-                            <div class="form-element-label">
-                                <label>
-                                    Confirm Password
-                                </label>
-                            </div>
-                            <div class="form-element-input">
-                                <input name="submitted-name" autocomplete="name" />
                             </div>
                         </div>
                     </div>
@@ -324,6 +277,8 @@ class Form extends HTMLElement {
                         </div>
                     </div>
                 </div>
+
+                
             </form>
         </section>            
       `
@@ -354,18 +309,6 @@ class Form extends HTMLElement {
       }
     })
 
-    // const notificationButton = this.shadow.querySelector('.form-save-button')
-    // const notification = this.shadow.querySelector('.notification')
-
-    // notificationButton.addEventListener('click', () => {
-    //   notification.classList.toggle('active')
-    //   notificationButton.classList.toggle('active')
-
-    //   setTimeout(() => {
-    //     notification.classList.remove('active')
-    //   }, 2500)
-    // })
-
     form.addEventListener('click', (event) => {
       if (event.target.closest('.tab')) {
         if (event.target.closest('.tab').classList.contains('active')) {
@@ -380,6 +323,14 @@ class Form extends HTMLElement {
         event.preventDefault()
         tabClicked.closest('section').querySelector(`.tab-content.active[data-tab="${tabActive.dataset.tab}"]`).classList.remove('active')
         tabClicked.closest('section').querySelector(`.tab-content[data-tab="${tabClicked.dataset.tab}"]`).classList.add('active')
+      }
+
+      if (event.target.closest('.form-save-button')) {
+        document.dispatchEvent(new CustomEvent('formSaved'), {
+          detail: {
+            message: 'Hola'
+          }
+        })
       }
     })
   }
