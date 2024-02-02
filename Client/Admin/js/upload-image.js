@@ -5,11 +5,6 @@ class UploadImage extends HTMLElement {
   }
 
   connectedCallback () {
-    document.addEventListener('showModalDestroy', event => {
-      const trashModal = this.shadow.querySelector('.upload-modal')
-      trashModal.classList.add('active')
-    })
-
     this.render()
   }
 
@@ -17,161 +12,110 @@ class UploadImage extends HTMLElement {
     this.shadow.innerHTML =
       /* html */`
         <style>
-            button{
-              background: none;
-              border: none;
-            }
+          button{
+            background: none;
+            border: none;
+          }
 
-            .form-row{
-              display: flex;
-              gap: 1rem;
-            }
+          .upload-modal{
+            display: flex;
+            gap: 1rem;
+          }
+          
+          .form-element{
+            flex: 1;
+            display: flex;
+            justify-content: space-between;
+          }
 
-            .upload-modal{
-              display: flex;
-              flex-wrap: wrap;
-              align-items: center;
-              justify-content: center;
-              background-color: hsla(0, 0%, 14%, 0.555);
-              position: fixed;
-              height: 100vh;
-              width: 100%;
-              left: 0;
-              top: 0;
-              overflow: hidden;
-              transition: opacity 200ms ease-in, visibility 0ms ease-in 0ms;
-              z-index: 1002;
-              visibility: hidden;
-            }
+          .form-element-label label{
+            min-width: 9rem;
+            display: inline-block;
+          }
 
-            .upload-modal h2{
-                font-family: 'Roboto Condensed', sans-serif;
-                font-weight: 700;
-                margin-bottom: 1.5rem;
-                font-size: 1.5rem;
-            }
+          label{
+            background-color: hsl(225, 54%, 33%);
+            color: hsl(0, 0%, 100%);
+            font-size: 1rem;
+            border: none;
+            padding: .5rem;
+            font-family: 'Roboto Condensed', sans-serif;
+          }
 
-            .upload-modal:lastchild{
+          .upload-button{
+            height: 10rem;
+            width: 10rem;
+            object-fit: cover;
+            box-sizing: border-box;
+            transition: opacity 0.3s ease;
+            background-color: hsl(0, 0%, 100%);
+            cursor: pointer;
+          }
 
-            }
+          .upload-button:hover{
+            opacity: 0.6;
+          }
 
-            .upload-window{
-              display: flex;
-              flex-wrap: wrap;
-              flex-direction: column;
-              background-color: hsl(195, 50%, 79%);
-              padding: 1rem;
-            }
+          .upload-button button{
+            height: 10rem;
+            width: 10rem;
+          }
+          
+          .upload-button svg{
+            width: 4rem;
+            cursor: pointer;
+            position: relative;
+          }
 
-            .tabs{
-              display: flex;
-              background-color: hsl(0, 0%, 100%);
-              justify-content: space-between;
-              width: 100%;
-              margin-bottom: 1rem;
-            }
-
-            .tab-selector{
-              display: flex;
-              justify-content: flex-start;
-              gap: 0.5rem;
-              box-sizing: border-box;
-              align-items: center;
-              width: 100%;
-            }
-
-            .tab.active{
-              background-color: hsl(225, 54%, 33%);
-              height: 100%;
-              cursor: pointer;
-              box-sizing: border-box;
-            }
-
-            .tab.active button{
-              color: hsl(0, 0%, 100%);
-              font-family: 'Roboto Condensed', sans-serif;
-              font-weight: 400;
-              font-size: 1rem;
-            }
-
-            .tab{
-              background-color: transparent;
-              height: 100%;
-              cursor: pointer;
-              box-sizing: border-box;
-            }
-
-            .tab button{
-              font-family: 'Roboto Condensed', sans-serif;
-              font-weight: 700;
-              font-size: 1rem;
-              background: transparent;
-              cursor: pointer;
-              padding: 1rem;
-            }
-
-            .image-gallery{
-              width: 90vh;
-              height: 60vh;
-            }
-
-            .select-button{
-              font-family: 'Roboto Condensed', sans-serif;
-              font-weight: 700;
-              font-size: 1.5rem;
-              background-color: hsl(88, 67%, 62%);
-              padding: 1rem;
-              cursor: pointer;
-              width: 9rem;
-            }
         </style>
-  
-      
-      <div class="upload-modal">
-        <div class="upload-window">
-          <h2>Imagen destacada</h2>
-          <div class="tabs">
-            <div class="tab-selector">
-              <div class="tab active" data-tab="gallery">
-                <button>
-                    Galería
-                </button>
-              </div>
-              <div class="tab" data-tab="upload">
-                <button>
-                    Subir Imagen
-                </button>
-              </div>
-            </div>
-          </div>
-            <div class="image-gallery">
 
-            </div>
-            <div class="select-button">
+      <div class="upload-modal">
+        <div class="form-element">
+          <div class="form-element-label">
+            <label>
+                Subir imagen
+            </label>
+            <div class="upload-button">
               <button>
-                Elegir Imagen 
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M9,16V10H5L12,3L19,10H15V16H9M5,20V18H19V20H5Z" />
+              </svg>
               </button>
             </div>
+          </div>
+          <div class="form-element-label">
+            <label>
+                Subir imagen
+            </label>
+            <div class="upload-button">
+              <button>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                  <path d="M9,16V10H5L12,3L19,10H15V16H9M5,20V18H19V20H5Z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div class="form-element-label">
+            <label>
+                Subir imagen
+            </label>
+            <div class="upload-button">
+              <button>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                  <path d="M9,16V10H5L12,3L19,10H15V16H9M5,20V18H19V20H5Z" />
+                </svg>
+              </button>
+            </div>
+          </div>
         </div>
-      </div>            
-      `
+      </div>
 
+      `
     const uploadModal = this.shadow.querySelector('.upload-modal')
 
-    uploadModal.addEventListener('click', (event) => {
-      if (event.target.closest('.tab')) {
-        if (event.target.closest('.tab').classList.contains('active')) {
-          return
-        }
-
-        const tabClicked = event.target.closest('.tab')
-        const tabActive = tabClicked.parentElement.querySelector('.active')
-
-        tabClicked.classList.add('active')
-        tabActive.classList.remove('active')
-        event.preventDefault()
-        tabClicked.closest('section').querySelector(`.tab-content.active[data-tab="${tabActive.dataset.tab}"]`).classList.remove('active')
-        tabClicked.closest('section').querySelector(`.tab-content[data-tab="${tabClicked.dataset.tab}"]`).classList.add('active')
+    uploadModal?.addEventListener('click', async (event) => {
+      if (event.target.closest('button')) {
+        document.dispatchEvent(new CustomEvent('showModalUpload'))
       }
     })
   }

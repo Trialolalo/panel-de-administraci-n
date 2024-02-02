@@ -264,18 +264,7 @@ class Form extends HTMLElement {
                 </div>
                 
                 <div class="tab-content" data-tab="images">
-                    <div class="form-row">
-                        <div class="form-element">
-                            <div class="form-element-label">
-                                <label>
-                                    Avatar
-                                </label>
-                            </div>
-                            <div class="form-element-input">
-                                <input type="file"/>
-                            </div>
-                        </div>
-                    </div>
+                    <upload-image-component></upload-image-component>
                 </div>
 
                 
