@@ -1,8 +1,8 @@
 const db = require('../../models')
-const ImageConfiguration = db.ImageConfiguration
+const Return = db.Return
 
 exports.create = (req, res) => {
-  ImageConfiguration.create(req.body).then(data => {
+  Return.create(req.body).then(data => {
     res.status(200).send(data)
   }).catch(err => {
     res.status(500).send({
@@ -16,8 +16,8 @@ exports.findAll = (req, res) => {
   const limit = parseInt(req.query.size) || 10
   const offset = (page - 1) * limit
 
-  ImageConfiguration.findAndCountAll({
-    attributes: ['id', 'name', 'mediaQuery', 'createdAt', 'updatedAt'],
+  Return.findAndCountAll({
+    attributes: ['id', 'saleId', 'customerId', 'reference', 'totalPrice', 'totalBasePrice', 'totalTaxPrice', 'returnDate', 'returnTime', 'createdAt', 'updatedAt'],
     limit,
     offset,
     order: [['createdAt', 'DESC']]
@@ -40,7 +40,7 @@ exports.findAll = (req, res) => {
 exports.findOne = (req, res) => {
   const id = req.params.id
 
-  ImageConfiguration.findByPk(id).then(data => {
+  Return.findByPk(id).then(data => {
     if (data) {
       res.status(200).send(data)
     } else {
@@ -58,7 +58,7 @@ exports.findOne = (req, res) => {
 exports.update = (req, res) => {
   const id = req.params.id
 
-  ImageConfiguration.update(req.body, {
+  Return.update(req.body, {
     where: { id }
   }).then(([numberRowsAffected]) => {
     if (numberRowsAffected === 1) {
@@ -80,7 +80,7 @@ exports.update = (req, res) => {
 exports.delete = (req, res) => {
   const id = req.params.id
 
-  ImageConfiguration.destroy({
+  Return.destroy({
     where: { id }
   }).then((numberRowsAffected) => {
     if (numberRowsAffected === 1) {

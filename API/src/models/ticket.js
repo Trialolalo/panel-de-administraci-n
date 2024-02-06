@@ -25,13 +25,7 @@ module.exports = function (sequelize, DataTypes) {
       }
     },
     returnId: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-      validate: {
-        notNull: {
-          msg: 'Por favor, rellena el campo "Devolución".'
-        }
-      }
+      type: DataTypes.INTEGER
     },
     reference: {
       type: DataTypes.STRING,

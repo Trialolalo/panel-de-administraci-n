@@ -17,7 +17,7 @@ exports.findAll = (req, res) => {
   const offset = (page - 1) * limit
 
   Sale.findAndCountAll({
-    attributes: ['id', 'customerId', 'paymentMethodId', 'couponId', 'totalPrice', 'saleDate', 'saleTime', 'createdAt', 'updatedAt'],
+    attributes: ['id', 'priceId', 'paymentMethodId', 'couponId', 'totalPrice', 'saleDate', 'saleTime', 'createdAt', 'updatedAt'],
     limit,
     offset,
     order: [['createdAt', 'DESC']]
@@ -82,7 +82,7 @@ exports.delete = (req, res) => {
 
   Sale.destroy({
     where: { id }
-  }).then(([numberRowsAffected]) => {
+  }).then((numberRowsAffected) => {
     if (numberRowsAffected === 1) {
       res.status(200).send({
         message: 'El elemento ha sido borrado correctamente'

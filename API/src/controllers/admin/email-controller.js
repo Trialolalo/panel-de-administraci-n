@@ -94,7 +94,7 @@ exports.delete = (req, res) => {
   Email.destroy({
     where: { id }
   })
-    .then(([numberRowsAffected]) => {
+    .then((numberRowsAffected) => {
       if (numberRowsAffected === 1) {
         res.status(200).send({
           message: 'El correo electrónico ha sido eliminado correctamente.'

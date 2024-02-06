@@ -42,12 +42,7 @@ module.exports = function (sequelize, DataTypes) {
     },
     comercialAddress: {
       type: DataTypes.STRING,
-      allowNull: true,
-      validate: {
-        notNull: {
-          msg: 'Por favor, rellena el campo "Dirección comercial".'
-        }
-      }
+      allowNull: true
     },
     fiscalAddress: {
       type: DataTypes.STRING,
