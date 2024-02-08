@@ -44,7 +44,7 @@ exports.findOne = (req, res) => {
   const id = req.params.id
 
   CartDetail.findByPk(id, {
-    attributes: ['id', 'cartId', 'productId', 'quantity', 'price']
+    attributes: ['id', 'cartId', 'productId', 'quantity']
   })
     .then(data => {
       if (data) {
@@ -56,6 +56,7 @@ exports.findOne = (req, res) => {
       }
     })
     .catch(_ => {
+      console.log(_)
       res.status(500).send({
         message: 'Algún error ha surgido al recuperar la id=' + id
       })

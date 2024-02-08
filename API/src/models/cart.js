@@ -9,7 +9,16 @@ module.exports = function (sequelize, DataTypes) {
     uuid: {
       type: DataTypes.UUID,
       allowNull: false,
-      defaultValue: DataTypes.UUIDV4
+      defaultValue: DataTypes.UUIDV4,
+      validate: {
+        notNull: {
+          msg: 'Por favor, rellena el campo "UUID".'
+        },
+        isUUID: {
+          args: 4,
+          msg: 'Añade una UUID válida'
+        }
+      }
     },
     customerId: {
       type: DataTypes.INTEGER

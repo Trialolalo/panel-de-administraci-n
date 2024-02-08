@@ -88,20 +88,12 @@ module.exports = function (sequelize, DataTypes) {
         fields: [
           { name: 'email' }
         ]
-      },
-      {
-        name: 'cities_countryId_fk',
-        using: 'BTREE',
-        fields: [
-          { name: 'countryId' }
-        ]
       }
     ]
   })
 
   Contact.associate = function (models) {
     Contact.belongsTo(models.Fingerprint, { as: 'fingerprint', foreignKey: 'fingerprintId' })
-    Contact.belongsTo(models.Country, { as: 'country', foreignKey: 'countryId' })
   }
 
   return Contact

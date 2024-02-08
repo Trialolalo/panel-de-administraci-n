@@ -123,13 +123,6 @@ module.exports = function (sequelize, DataTypes) {
         ]
       },
       {
-        name: 'cart_details_priceId_fk',
-        using: 'BTREE',
-        fields: [
-          { name: 'priceId' }
-        ]
-      },
-      {
         name: 'cart_details_taxId_fk',
         using: 'BTREE',
         fields: [

@@ -17,15 +17,7 @@ module.exports = function (sequelize, DataTypes) {
     },
     emailId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
-      validate: {
-        notNull: {
-          msg: 'Por favor, rellena el campo "Email".'
-        },
-        isEmail: {
-          msg: 'Por favor, rellena el campo "Email" con un email válido.'
-        }
-      }
+      allowNull: false
     },
     error: {
       type: DataTypes.TEXT,

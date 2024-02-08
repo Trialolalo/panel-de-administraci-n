@@ -65,10 +65,9 @@ module.exports = function (sequelize, DataTypes) {
   PaymentMethod.associate = function (models) {
     PaymentMethod.hasMany(models.ReturnError, { as: 'returnErrors', foreignKey: 'paymentMethodId' })
     PaymentMethod.hasMany(models.Return, { as: 'returns', foreignKey: 'paymentMethodId' })
-    PaymentMethod.hasMany(models.SaleDetail, { as: 'saleDetails', foreignKey: 'paymentMethodId' })
     PaymentMethod.hasMany(models.SaleError, { as: 'saleErrors', foreignKey: 'paymentMethodId' })
     PaymentMethod.hasMany(models.Sale, { as: 'sales', foreignKey: 'paymentMethodId' })
-    PaymentMethod.belongsToMany(models.Product, { through: models.SaleDetail, as: 'products', foreignKey: 'paymentMethodId' })
+    PaymentMethod.belongsToMany(models.Product, { through: models.Sale, as: 'products', foreignKey: 'paymentMethodId' })
   }
 
   return PaymentMethod

@@ -7,6 +7,7 @@ exports.create = (req, res) => {
       res.status(200).send(data)
     })
     .catch(err => {
+      console.log(err)
       res.status(500).send({
         message: err.errors || 'Algún error ha surgido al insertar el dato.'
       })
@@ -19,7 +20,7 @@ exports.findAll = (req, res) => {
   const offset = (page - 1) * limit
 
   Invoice.findAndCountAll({
-    attributes: ['id', 'reference', 'createdAt', 'updatedAt'],
+    attributes: ['id', 'customerId', 'returnId', 'reference', 'createdAt', 'updatedAt'],
     limit,
     offset,
     order: [['createdAt', 'DESC']]
@@ -44,7 +45,7 @@ exports.findOne = (req, res) => {
   const id = req.params.id
 
   Invoice.findByPk(id, {
-    attributes: ['id', 'customer', 'totalAmount', 'dueDate', 'status']
+    attributes: ['id', 'customerId', 'returnId', 'reference', 'createdAt', 'updatedAt']
   })
     .then(data => {
       if (data) {
