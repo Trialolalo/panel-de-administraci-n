@@ -150,6 +150,33 @@ class Form extends HTMLElement {
                 visibility: visible;
                 display: block;
             }
+
+            .errors-container {
+            background: hsl(225, 54%, 33%);
+            z-index: 1006;
+            padding: 1rem;
+            opacity: 0.5;
+            display:none;
+            overflow: hidden;
+            visibility: hidden;
+            transition: opacity 200ms ease-in, visibility 0ms ease-in 0ms;
+            margin-bottom: 1rem;
+            height: 0;
+          }
+
+          .errors-container.active {
+            right: 10vh;
+            opacity: 1;
+            visibility: visible;
+            height: auto;
+            display: block;
+          }
+
+          .errors-container li {
+            color: hsl(0, 0%, 100%);
+            font-family: 'Roboto Condensed', sans-serif;
+            font-weight: 400;
+          }
         </style>
   
         <section class="form">
@@ -181,6 +208,10 @@ class Form extends HTMLElement {
             </div>
             <form action=""> 
                 <input type="hidden" name="id" />
+                <div class="errors-container">
+                    <ul>
+                    </ul>
+                </div>
                 <div class="tab-content active" data-tab="main">
                     <div class="form-row">
                         <div class="form-element">
@@ -312,7 +343,7 @@ class Form extends HTMLElement {
         delete formDataJson.id
 
         try {
-          const response = await fetch('http://127.0.0.1:8080/api/admin/faqs', {
+          const response = await fetch(`${import.meta.env.VITE_API_URL}${this.getAttribute('endpoint')}`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
@@ -324,23 +355,40 @@ class Form extends HTMLElement {
             throw response
           }
 
-          if (response.satus === 200) {
-            const data = await response.json()
-
-            document.dispatchEvent(new CustomEvent('formSaved'), {
+          if (response.status === 200) {
+            document.dispatchEvent(new CustomEvent('message', {
               detail: {
-                message: data.message
+                message: 'Registro guardado correctamente'
               }
-            })
+            }))
           }
         } catch (response) {
           const error = await response.json()
-          error.message.forEach(error => {
-            console.log(error.message)
-          })
+          displayErrors(error.message)
         }
       }
     })
+
+    function displayErrors (errors) {
+      const errorsContainer = formSection.querySelector('.errors-container')
+      const errorsList = errorsContainer.querySelector('ul')
+
+      errorsList.innerHTML = ''
+
+      errorsContainer.classList.add('active')
+
+      if (Array.isArray(errors)) {
+        errors.forEach(errorMessage => {
+          errorsList.innerHTML += `<li>${errorMessage.message || errorMessage}</li>`
+        })
+      } else {
+        errorsList.innerHTML += `<li>${errors.message || errors}</li>`
+      }
+
+      formSection.addEventListener('click', async (event) => {
+        errorsContainer.classList.remove('active')
+      })
+    }
   }
 }
 

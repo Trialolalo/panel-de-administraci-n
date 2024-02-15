@@ -3,10 +3,8 @@ const Faq = db.Faq
 
 exports.create = (req, res) => {
   Faq.create(req.body).then(data => {
-    data.message = 'hola que tal'
     res.status(200).send(data)
   }).catch(err => {
-    console.log(err)
     if (err.errors) {
       res.status(422).send({
         message: err.errors

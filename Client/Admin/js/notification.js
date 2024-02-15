@@ -5,12 +5,13 @@ class Notification extends HTMLElement {
   }
 
   connectedCallback () {
-    document.addEventListener('formSaved', this.handleShowNotification.bind(this))
+    document.addEventListener('message', this.handleShowNotification.bind(this))
 
     this.render()
   }
 
-  handleShowNotification () {
+  handleShowNotification (event) {
+    this.shadow.querySelector('.message').innerHTML = event.detail.message
     this.shadow.querySelector('.notification').classList.add('active')
     setTimeout(() => {
       this.shadow.querySelector('.notification').classList.remove('active')
@@ -49,7 +50,7 @@ class Notification extends HTMLElement {
         </style>
   
         <div class="notification">
-            <h3>Formulario guardado</h3>
+          <h3 class="message"></h3>
         </div>        
       `
   }
