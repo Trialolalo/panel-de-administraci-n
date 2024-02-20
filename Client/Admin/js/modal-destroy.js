@@ -2,15 +2,19 @@ class ModalDestroy extends HTMLElement {
   constructor () {
     super()
     this.shadow = this.attachShadow({ mode: 'open' })
+    this.endpoint = ''
   }
 
   connectedCallback () {
-    document.addEventListener('showModalDestroy', event => {
-      const trashModal = this.shadow.querySelector('.trash-modal')
-      trashModal.classList.add('active')
-    })
+    document.addEventListener('showModalDestroy', this.handleShowModalDestroy.bind(this))
 
     this.render()
+  }
+
+  handleShowModalDestroy (event) {
+    this.endpoint = event.detail.endpoint
+    const trashModal = this.shadow.querySelector('.trash-modal')
+    trashModal.classList.add('active')
   }
 
   render () {
@@ -28,21 +32,21 @@ class ModalDestroy extends HTMLElement {
             }
             
             .trash-modal{
-                display: flex;
-                flex-wrap: wrap;
-                align-items: center;
-                justify-content: center;
-                background-color: hsla(0, 0%, 14%, 0.555);
-                visibility: hidden;
-                position: fixed;
-                height: 100vh;
-                width: 100%;
-                left: 0;
-                top: 0;
-                opacity: 0.5;
-                overflow: hidden;
-                transition: opacity 200ms ease-in, visibility 0ms ease-in 0ms;
-                z-index: 1002;
+              display: flex;
+              flex-wrap: wrap;
+              align-items: center;
+              justify-content: center;
+              background-color: hsla(0, 0%, 14%, 0.555);
+              visibility: hidden;
+              position: fixed;
+              height: 100vh;
+              width: 100%;
+              left: 0;
+              top: 0;
+              opacity: 0.5;
+              overflow: hidden;
+              transition: opacity 200ms ease-in, visibility 0ms ease-in 0ms;
+              z-index: 1002;
             }
 
             .trash-modal.active{
@@ -121,7 +125,26 @@ class ModalDestroy extends HTMLElement {
       }
 
       if (event.target.closest('.button-confirmation')) {
-        trashModal.classList.remove('active')
+        try {
+          const response = await fetch(this.endpoint, {
+            method: 'DELETE'
+          })
+
+          if (response.status === 200) {
+            document.dispatchEvent(new CustomEvent('message', {
+              detail: {
+                message: 'Registro eliminado correctamente'
+              }
+            }))
+
+            trashModal.classList.remove('active')
+          } else {
+            throw response
+          }
+        } catch (error) {
+          console.error('Error al eliminar el registro:', error)
+        }
+        document.dispatchEvent(new CustomEvent('refresh'))
       }
     })
   }

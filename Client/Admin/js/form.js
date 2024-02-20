@@ -5,7 +5,12 @@ class Form extends HTMLElement {
   }
 
   connectedCallback () {
+    document.addEventListener('showElement', this.handleShowElement.bind(this))
     this.render()
+  }
+
+  handleShowElement (event) {
+    this.showElement(event.detail.data)
   }
 
   render () {
@@ -340,11 +345,17 @@ class Form extends HTMLElement {
         const form = this.shadow.querySelector('form')
         const formData = new FormData(form)
         const formDataJson = Object.fromEntries(formData.entries())
+        if (!formDataJson.id) {
+          delete formDataJson.id
+        }
+
+        const endpoint = formDataJson.id ? `${import.meta.env.VITE_API_URL}${this.getAttribute('endpoint')}/${formDataJson.id}` : `${import.meta.env.VITE_API_URL}${this.getAttribute('endpoint')}`
+        const method = formDataJson.id ? 'PUT' : 'POST'
         delete formDataJson.id
 
         try {
-          const response = await fetch(`${import.meta.env.VITE_API_URL}${this.getAttribute('endpoint')}`, {
-            method: 'POST',
+          const response = await fetch(endpoint, {
+            method,
             headers: {
               'Content-Type': 'application/json'
             },
@@ -364,31 +375,43 @@ class Form extends HTMLElement {
           }
         } catch (response) {
           const error = await response.json()
-          displayErrors(error.message)
+          this.displayErrors(error.message)
         }
+        document.dispatchEvent(new CustomEvent('refresh'))
       }
     })
+  }
 
-    function displayErrors (errors) {
-      const errorsContainer = formSection.querySelector('.errors-container')
-      const errorsList = errorsContainer.querySelector('ul')
+  displayErrors (errors) {
+    const formSection = this.shadow.querySelector('.form')
+    const errorsContainer = formSection.querySelector('.errors-container')
+    const errorsList = errorsContainer.querySelector('ul')
 
-      errorsList.innerHTML = ''
+    errorsList.innerHTML = ''
 
-      errorsContainer.classList.add('active')
+    errorsContainer.classList.add('active')
 
-      if (Array.isArray(errors)) {
-        errors.forEach(errorMessage => {
-          errorsList.innerHTML += `<li>${errorMessage.message || errorMessage}</li>`
-        })
-      } else {
-        errorsList.innerHTML += `<li>${errors.message || errors}</li>`
-      }
-
-      formSection.addEventListener('click', async (event) => {
-        errorsContainer.classList.remove('active')
+    if (Array.isArray(errors)) {
+      errors.forEach(errorMessage => {
+        errorsList.innerHTML += `<li>${errorMessage.message || errorMessage}</li>`
       })
+    } else {
+      errorsList.innerHTML += `<li>${errors.message || errors}</li>`
     }
+
+    formSection.addEventListener('click', async (event) => {
+      errorsContainer.classList.remove('active')
+    })
+  }
+
+  showElement (element) {
+    Object.entries(element).forEach(([key, value]) => {
+      console.log(key + ' ' + value)
+      const input = this.shadow.querySelector(`[name = "${key}"]`)
+      if (input) {
+        input.value = value
+      }
+    })
   }
 }
 

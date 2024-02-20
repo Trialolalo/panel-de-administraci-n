@@ -7,12 +7,18 @@ class Table extends HTMLElement {
 
   connectedCallback () {
     this.loadData().then(() => this.render())
+    document.addEventListener('refresh', this.handleTableRecords.bind(this))
   }
 
   async loadData () {
     const response = await fetch(`${import.meta.env.VITE_API_URL}${this.getAttribute('endpoint')}`)
     const data = await response.json()
     this.rows = data.rows
+  }
+
+  handleTableRecords () {
+    console.log('hola')
+    this.loadData(this.currentPage).then(() => this.render())
   }
 
   render () {
@@ -78,25 +84,25 @@ class Table extends HTMLElement {
             width: 2rem;
         }
 
-        .pencil svg{
+        .edit-button svg{
             width: 2rem;
             height: 2rem;
             fill: hsl(0, 0%, 100%);
             cursor: pointer;
         }
 
-        .pencil svg:hover{
+        .edit-button svg:hover{
             fill: hsl(88, 67%, 62%);
         }
 
-        .trash svg{
+        .delete-button svg{
             width: 2rem;
             height: 2rem;
             fill: hsl(0, 0%, 100%);
             cursor: pointer;
         }
 
-        .trash svg:hover{
+        .delete-button svg:hover{
             fill: hsl(0, 77%, 66%);
         }    
 
@@ -137,7 +143,7 @@ class Table extends HTMLElement {
       tableTop.appendChild(tableEdit)
 
       const pencil = document.createElement('div')
-      pencil.classList.add('pencil')
+      pencil.classList.add('edit-button')
       pencil.dataset.id = row.id
       tableEdit.appendChild(pencil)
 
@@ -146,7 +152,7 @@ class Table extends HTMLElement {
       editButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z" /></svg>'
 
       const trash = document.createElement('div')
-      trash.classList.add('trash')
+      trash.classList.add('delete-button')
       trash.dataset.id = row.id
       tableEdit.appendChild(trash)
 
@@ -175,40 +181,38 @@ class Table extends HTMLElement {
           tableList.appendChild(tableItem)
         }
       })
-
-      // <div class="table-register">
-      //     <div class="table-top">
-      //         <div class="table-edit">
-      //             <div class="pencil">
-      //                 <button>
-      //                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z" /></svg>
-      //                 </button>
-      //             </div>
-      //             <div class="trash">
-      //                 <button class="trash-slide">
-      //                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" /></svg>
-      //                 </button>
-      //             </div>
-      //         </div>
-      //     </div>
-      //     <div class="table-info">
-      //         <ul>
-      //             <li>Pregunta:</li>
-      //             <li>Respuesta:</li>
-      //         </ul>
-      //     </div>
-      // </div>
-      console.log(row.name)
     })
+
     const tableSection = this.shadow.querySelector('.tables')
 
     tableSection?.addEventListener('click', async (event) => {
-      if (event.target.closest('.trash')) {
-        document.dispatchEvent(new CustomEvent('showModalDestroy'))
+      if (event.target.closest('.delete-button')) {
+        const deleteButton = event.target.closest('.delete-button')
+        const id = deleteButton.dataset.id
+
+        const endpoint = `${import.meta.env.VITE_API_URL}${this.getAttribute('endpoint')}/${id}`
+
+        document.dispatchEvent(new CustomEvent('showModalDestroy', {
+          detail: {
+            endpoint
+          }
+        }))
       }
 
       if (event.target.closest('.filter-slide')) {
         document.dispatchEvent(new CustomEvent('showModalFilter'))
+      }
+
+      if (event.target.closest('.edit-button')) {
+        const elementId = event.target.closest('.edit-button').dataset.id
+        const response = await fetch(`${import.meta.env.VITE_API_URL}${this.getAttribute('endpoint')}/${elementId}`)
+        const data = await response.json()
+
+        document.dispatchEvent(new CustomEvent('showElement', {
+          detail: {
+            data
+          }
+        }))
       }
     })
   }
