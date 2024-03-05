@@ -17,7 +17,6 @@ class Table extends HTMLElement {
   }
 
   handleTableRecords () {
-    console.log('hola')
     this.loadData(this.currentPage).then(() => this.render())
   }
 

@@ -5,9 +5,26 @@ class Footer extends HTMLElement {
       this.shadow = this.attachShadow({ mode: 'open' })
     }
   
-    connectedCallback () {
-
-        this.render()
+    async connectedCallback() {
+        await this.loadDataAndRender();
+    }
+    
+    async loadDataAndRender () {
+        await this.loadData();
+        this.render();
+    }
+    
+    async loadData() {
+        try {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}${this.getAttribute('endpoint')}`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            const data = await response.json();
+            this.rows = data;
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
     }
   
     render () {
@@ -43,6 +60,53 @@ class Footer extends HTMLElement {
 
             .footer-menu li{
                 cursor: pointer;
+            }
+
+            .footer-menu ul li button{
+                background: transparent;
+                border: none;
+                font-family: 'Exo 2', sans-serif;
+                font-weight: 300;
+                cursor: pointer;
+                z-index: 1002;
+                width: 100%;
+                color: white;
+                font-size: 1rem;
+            }
+
+            .faqs ul{
+                padding: 0;
+            }
+
+            .faqs li{
+                max-height: 3.5rem;
+            }
+
+            .faqs .submenu {
+                display: flex;
+                flex-direction: column;
+                top: 100%;
+                background-color: hsla(0, 0%, 0%, 0.94);
+                display: none;
+                z-index: 1006;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                text-align: center;
+                position: relative;
+                bottom: 100%;
+                transform: translateY(-100%);
+            }
+
+            .faqs:hover .submenu {
+                display: block;
+            }
+
+            .faqs .submenu a{
+                color: hsl(0, 0%, 100%);
+                text-decoration: none;
+                display: block;
+                padding: 10px;
             }
 
             .social-media ul{
@@ -83,8 +147,11 @@ class Footer extends HTMLElement {
                     <li>
                         About Us
                     </li>
-                    <li>
-                        FAQs
+                    <li class="faqs">
+                       <button>FAQs</button>
+                        <ul class="submenu">
+                            <li class="table-faq"><a></a></li>
+                        </ul>
                     </li>
                     <li>
                         Privacy Policy
@@ -127,8 +194,21 @@ class Footer extends HTMLElement {
             </div>
         </footer>  
       `
+      const tableFaq = this.shadow.querySelector('.table-faq')
+      const tableList = document.createElement('li')
+      tableFaq.appendChild(tableList)
 
-
+      if (this.rows){
+        this.rows.forEach(row =>{
+            Object.entries(row).forEach(([key, value]) => {
+                if (key !== 'id') {
+                  const tableItem = document.createElement('a')
+                  tableItem.innerHTML = `${key}: ${value}`
+                  tableList.appendChild(tableItem)
+                }
+              })
+            })
+        }
     }
 
 }

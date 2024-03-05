@@ -1,5 +1,5 @@
-const db = require('../../models')
-const Email = db.Email
+const sequelizeDb = require('../../models/sequelize')
+const Email = sequelizeDb.Email
 
 // Crear un nuevo correo electrónico
 exports.create = (req, res) => {
