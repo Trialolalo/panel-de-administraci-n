@@ -20,10 +20,10 @@ exports.findAll = async (req, res) => {
     const response = result.map(doc => ({
       locales: doc.locales[req.userLanguage]
     }))
-    console.log(response)
 
     res.status(200).send(response)
   } catch (err) {
+    console.log(err)
     res.status(500).send({
       message: err.message || 'Algún error ha surgido al recuperar los datos.'
     })

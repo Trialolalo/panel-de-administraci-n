@@ -3,6 +3,7 @@ class Footer extends HTMLElement {
     constructor () {
       super()
       this.shadow = this.attachShadow({ mode: 'open' })
+      this.data = []
     }
   
     async connectedCallback() {
@@ -20,8 +21,8 @@ class Footer extends HTMLElement {
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
-            const data = await response.json();
-            this.rows = data;
+            this.data = await response.json();
+
         } catch (error) {
             console.error('Error fetching data:', error);
         }
@@ -194,21 +195,16 @@ class Footer extends HTMLElement {
             </div>
         </footer>  
       `
-      const tableFaq = this.shadow.querySelector('.table-faq')
-      const tableList = document.createElement('li')
-      tableFaq.appendChild(tableList)
+        const tableFaq = this.shadow.querySelector('.table-faq')
+        const tableList = document.createElement('li')
+        tableFaq.appendChild(tableList)
 
-      if (this.rows){
-        this.rows.forEach(row =>{
-            Object.entries(row).forEach(([key, value]) => {
-                if (key !== 'id') {
-                  const tableItem = document.createElement('a')
-                  tableItem.innerHTML = `${key}: ${value}`
-                  tableList.appendChild(tableItem)
-                }
-              })
-            })
-        }
+        this.data.forEach(faq =>{
+            const tableItem = document.createElement('a')
+            tableItem.innerHTML = `${faq.locales.question}: ${faq.locales.answer}`
+            tableList.appendChild(tableItem)
+        })
+                
     }
 
 }
