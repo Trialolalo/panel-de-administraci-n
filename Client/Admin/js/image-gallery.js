@@ -103,23 +103,15 @@ class ImageGallery extends HTMLElement {
               width: 100%;
             }
 
-            .tab.active{
-              background-color: hsl(225, 54%, 33%);
-              height: 100%;
-              cursor: pointer;
-              box-sizing: border-box;
-            }
-
-            .tab.active button{
-              color: hsl(0, 0%, 100%);
+            .tab button{
+              color: hsl(225, 54%, 33%);
               font-family: 'Roboto Condensed', sans-serif;
               font-weight: 400;
-              font-size: 1rem;
+              font-size: 2rem;
               cursor: pointer;
             }
 
             .tab{
-              background-color: transparent;
               height: 100%;
               cursor: pointer;
               box-sizing: border-box;
@@ -128,19 +120,13 @@ class ImageGallery extends HTMLElement {
             .tab button{
               font-family: 'Roboto Condensed', sans-serif;
               font-weight: 700;
-              font-size: 1rem;
+              font-size: 1.3rem;
               background: transparent;
               cursor: pointer;
               padding: 1rem;
             }
 
-            .tab-content{
-              display: none;
-              transition: opacity 200ms ease-in, visibility 0ms ease-in 0ms;
-            }
-
             .tab-content.active{
-              display: block;
               width: 120vh;
               height: 50vh;
               display: flex;
@@ -153,11 +139,12 @@ class ImageGallery extends HTMLElement {
               gap: 1rem;
             }
             
-            .form-element{
+            .form-element-images{
               flex: 1;
               width: 100%;
+              height: 12rem;
             }
-
+            
             .form-element-label{
               background-color: hsl(225, 54%, 33%);
               padding: 0.2rem;
@@ -183,7 +170,6 @@ class ImageGallery extends HTMLElement {
             .form-element-input{
               margin-bottom: 1rem;
               background-color: hsl(0, 0%, 100%);
-
             }
 
             .form-element-input textarea{
@@ -198,25 +184,35 @@ class ImageGallery extends HTMLElement {
               border: 5px solid white;
             }
 
+            .images{
+              height: 12rem
+            }
+
             .images:hover img{
               opacity: 0.6;
             }
 
             .input-file{
+              display: flex;
               cursor: pointer;
-              width: auto;
               background-color: hsl(225, 54%, 33%);
-              top: 20vh;
-              left: 50vh;
               padding: 2rem;
-              position: relative;
+              height: 8rem;
+              width: 8rem;
+              align-items: center;
+              justify-content: center;
             }
 
             .input-file label{
               font-family: 'Roboto Condensed', sans-serif;
-              color: white;
+              color: hsl(0, 0%, 100%);
               font-weight: 400;
               cursor: pointer;
+            }
+
+            .input-file svg{
+              fill: hsl(0, 0%, 100%);
+              width: 8rem;
             }
 
             .select-button button{
@@ -244,20 +240,25 @@ class ImageGallery extends HTMLElement {
           </div>
           <div class="tabs">
             <div class="tab-selector">
-              <div class="tab active" data-tab="gallery">
+              <div class="tab" data-tab="gallery">
                 <button>
                   Galería
-                </button>
-              </div>
-              <div class="tab" data-tab="upload">
-                <button>
-                  Subir Imagen
                 </button>
               </div>
             </div>
           </div>
           <div class="tab-content active" data-tab="gallery">
             <div class="form-row">
+              <div class="form-element-images">
+                <div class="input-file">
+                  <label>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                      <path d="M8.5,13.5L11,16.5L14.5,12L19,18H5M21,19V5C21,3.89 20.1,3 19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19Z" />
+                    </svg>
+                    <input type="file" name="file"/>
+                  </label>
+                </div>
+              </div>
               <div class="images">
                 <img src="https://img.asmedia.epimg.net/resizer/Nk2QA3MjvO_H_VZsRkCDOShkhCU=/644x362/cloudfront-eu-central-1.images.arcpublishing.com/diarioas/QNDS4LEKNRDY7MMSIX6C43OE7A.jpg">
               </div>
@@ -291,18 +292,6 @@ class ImageGallery extends HTMLElement {
               </div>
             </aside>
           </div>
-          <div class="tab-content" data-tab="upload">
-            <div class="form-row">
-              <div class="form-element">
-                  <div class="input-file">
-                    <label>
-                      Subir imagen
-                      <input type="file"/>
-                    </label>
-                  </div>
-              </div>
-            </div>
-          </div>
           <div class="select-button">
             <button>
               Elegir Imagen 
@@ -333,6 +322,22 @@ class ImageGallery extends HTMLElement {
       } else if (event.target.closest('.button-close')) {
         uploadModal.classList.remove('active')
       }
+    })
+
+    const uploadFile = this.shadow.querySelector('input')
+
+    uploadFile.addEventListener('change', (event) => {
+      this.uploadFile(event.target.files[0])
+    })
+  }
+
+  async uploadFile (file) {
+    const formData = new FormData()
+    formData.append('file', file)
+
+    const result = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/images`, {
+      method: 'POST',
+      body: formData
     })
   }
 }
