@@ -38,7 +38,7 @@ class ImageGallery extends HTMLElement {
               justify-content: center;
               background-color: hsla(0, 0%, 14%, 0.555);
               position: fixed;
-              height: 100vh;
+              height: 100%;
               width: 100%;
               left: 0;
               top: 0;
@@ -128,21 +128,17 @@ class ImageGallery extends HTMLElement {
 
             .tab-content.active{
               width: 120vh;
-              height: 50vh;
+              min-height: 50vh;
               display: flex;
-              gap: 6rem;
+              gap: 3rem;
               opacity: 1;
             }
 
             .form-row{
               display: flex;
+              flex-wrap: wrap;
               gap: 1rem;
-            }
-            
-            .form-element-images{
-              flex: 1;
-              width: 100%;
-              height: 12rem;
+              overflow: auto;
             }
             
             .form-element-label{
@@ -249,7 +245,6 @@ class ImageGallery extends HTMLElement {
           </div>
           <div class="tab-content active" data-tab="gallery">
             <div class="form-row">
-              <div class="form-element-images">
                 <div class="input-file">
                   <label>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -257,7 +252,24 @@ class ImageGallery extends HTMLElement {
                     </svg>
                     <input type="file" name="file"/>
                   </label>
-                </div>
+              </div>
+              <div class="images">
+                <img src="https://img.asmedia.epimg.net/resizer/Nk2QA3MjvO_H_VZsRkCDOShkhCU=/644x362/cloudfront-eu-central-1.images.arcpublishing.com/diarioas/QNDS4LEKNRDY7MMSIX6C43OE7A.jpg">
+              </div>
+              <div class="images">
+                <img src="https://technoahora.com/wp-content/uploads/2023/10/dragons-dogma-2-capcom-tokyo-gam-1024x650.webp">
+              </div>
+              <div class="images">
+                <img src="https://cdn.dlcompare.com/others_jpg/upload/news/image/dragons-dogma-2-desvela-su-nueva-a9509372-image-a9509356.jpg">
+              </div>
+              <div class="images">
+                <img src="https://img.asmedia.epimg.net/resizer/Nk2QA3MjvO_H_VZsRkCDOShkhCU=/644x362/cloudfront-eu-central-1.images.arcpublishing.com/diarioas/QNDS4LEKNRDY7MMSIX6C43OE7A.jpg">
+              </div>
+              <div class="images">
+                <img src="https://technoahora.com/wp-content/uploads/2023/10/dragons-dogma-2-capcom-tokyo-gam-1024x650.webp">
+              </div>
+              <div class="images">
+                <img src="https://cdn.dlcompare.com/others_jpg/upload/news/image/dragons-dogma-2-desvela-su-nueva-a9509372-image-a9509356.jpg">
               </div>
               <div class="images">
                 <img src="https://img.asmedia.epimg.net/resizer/Nk2QA3MjvO_H_VZsRkCDOShkhCU=/644x362/cloudfront-eu-central-1.images.arcpublishing.com/diarioas/QNDS4LEKNRDY7MMSIX6C43OE7A.jpg">
@@ -338,6 +350,19 @@ class ImageGallery extends HTMLElement {
     const result = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/images`, {
       method: 'POST',
       body: formData
+    })
+
+    const filenames = await result.json()
+
+    filenames.forEach(filename => {
+      const imagesContainer = this.shadow.querySelector('.form-row')
+      const imageContainer = document.createElement('div')
+      imageContainer.classList.add('images')
+      imagesContainer.appendChild(imageContainer)
+
+      const image = document.createElement('img')
+      image.src = `${import.meta.env.VITE_API_URL}/api/admin/images/${filename}`
+      imageContainer.appendChild(image)
     })
   }
 }
