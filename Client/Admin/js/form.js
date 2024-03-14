@@ -19,33 +19,33 @@ class Form extends HTMLElement {
         <style>
             
             button{
-                background: none;
-                border: none;
+              background: none;
+              border: none;
             }
             .form{
-                flex: 2;
+              flex: 2;
             }
 
             .form-row{
-                display: flex;
-                gap: 1rem;
+              display: flex;
+              gap: 1rem;
             }
             
             .form-element{
-                flex: 1;
+              flex: 1;
             }
 
             .form-element-label{
-                background-color: hsl(225, 54%, 33%);
-                padding: 0.2rem;
+              background-color: hsl(225, 54%, 33%);
+              padding: 0.2rem;
             }
 
             label{
-                color: hsl(0, 0%, 100%);
-                font-size: large;
-                border: none;
-                padding: 1rem;
-                font-family: 'Roboto Condensed', sans-serif;
+              color: hsl(0, 0%, 100%);
+              font-size: large;
+              border: none;
+              padding: 1rem;
+              font-family: 'Roboto Condensed', sans-serif;
             }
 
             .form-element-input{
@@ -54,134 +54,134 @@ class Form extends HTMLElement {
             }
 
             .form-element-input textarea{
-                background-color: hsl(0, 0%, 100%);
-                width: 100%;
+              background-color: hsl(0, 0%, 100%);
+              width: 100%;
             }
 
             input{
-                box-sizing: border-box;
-                padding: 0.5rem;
-                width: 100%;
-                height: 2rem;
+              box-sizing: border-box;
+              padding: 0.5rem;
+              width: 100%;
+              height: 2rem;
             }
 
             .validate.active{
-                border-color: hsl(0, 100%, 50%);
-                border-width: 0.25rem;
+              border-color: hsl(0, 100%, 50%);
+              border-width: 0.25rem;
             }
 
             .tabs{
-                display: flex;
-                background-color: hsl(0, 0%, 100%);
-                justify-content: space-between;
-                width: 100%;
-                margin-bottom: 1rem;
+              display: flex;
+              background-color: hsl(0, 0%, 100%);
+              justify-content: space-between;
+              width: 100%;
+              margin-bottom: 1rem;
             }
 
             .tab-selector{
-                display: flex;
-                justify-content: flex-start;
-                gap: 0.5rem;
-                box-sizing: border-box;
-                align-items: center;
-                width: 100%;
+              display: flex;
+              justify-content: flex-start;
+              gap: 0.5rem;
+              box-sizing: border-box;
+              align-items: center;
+              width: 100%;
             }
 
             .tab.active{
-                background-color: hsl(225, 54%, 33%);
-                height: 100%;
-                cursor: pointer;
-                box-sizing: border-box;
+              background-color: hsl(225, 54%, 33%);
+              height: 100%;
+              cursor: pointer;
+              box-sizing: border-box;
             }
 
             .tab.active button{
-                color: hsl(0, 0%, 100%);
-                font-family: 'Roboto Condensed', sans-serif;
-                font-weight: 400;
-                font-size: 1rem;
+              color: hsl(0, 0%, 100%);
+              font-family: 'Roboto Condensed', sans-serif;
+              font-weight: 400;
+              font-size: 1rem;
             }
 
             .tab{
-                background-color: transparent;
-                height: 100%;
-                cursor: pointer;
-                box-sizing: border-box;
+              background-color: transparent;
+              height: 100%;
+              cursor: pointer;
+              box-sizing: border-box;
             }
 
             .tab button{
-                font-family: 'Roboto Condensed', sans-serif;
-                font-weight: 700;
-                font-size: 1rem;
-                background: transparent;
-                cursor: pointer;
-                padding: 1rem;
+              font-family: 'Roboto Condensed', sans-serif;
+              font-weight: 700;
+              font-size: 1rem;
+              background: transparent;
+              cursor: pointer;
+              padding: 1rem;
             }
 
             .form-buttons {
-                display: flex;
-                gap: 0.5rem;
-                justify-content: flex-end;
-                align-items: center;
-                padding: 0.5rem;
+              display: flex;
+              gap: 0.5rem;
+              justify-content: flex-end;
+              align-items: center;
+              padding: 0.5rem;
             }
             
             .form-clean-button button,
             .form-save-button button {
-                border: none;
-                background: none;
+              border: none;
+              background: none;
             }
 
             .form-clean-button button svg,
             .form-save-button button svg {
-                width: 2rem;
+              width: 2rem;
             }
             
             .form-clean-button button svg path,
             .form-save-button button svg path {
-                fill: hsl(219, 79%, 66%);
+              fill: hsl(219, 79%, 66%);
             }
             
             .form-clean-button button:hover svg path,
             .form-save-button button:hover svg path {
-                fill: hsl(225, 54%, 33%);
+              fill: hsl(225, 54%, 33%);
             }
 
             .tab-content{
-                visibility: hidden;
-                display: none;
+              visibility: hidden;
+              display: none;
             }
 
             .tab-content.active{
-                visibility: visible;
-                display: block;
+              visibility: visible;
+              display: block;
             }
 
             .errors-container {
-            background: hsl(225, 54%, 33%);
-            z-index: 1006;
-            padding: 1rem;
-            opacity: 0.5;
-            display:none;
-            overflow: hidden;
-            visibility: hidden;
-            transition: opacity 200ms ease-in, visibility 0ms ease-in 0ms;
-            margin-bottom: 1rem;
-            height: 0;
-          }
+              background: hsl(225, 54%, 33%);
+              z-index: 1006;
+              padding: 1rem;
+              opacity: 0.5;
+              display:none;
+              overflow: hidden;
+              visibility: hidden;
+              transition: opacity 200ms ease-in, visibility 0ms ease-in 0ms;
+              margin-bottom: 1rem;
+              height: 0;
+            }
 
-          .errors-container.active {
-            right: 10vh;
-            opacity: 1;
-            visibility: visible;
-            height: auto;
-            display: block;
-          }
+            .errors-container.active {
+              right: 10vh;
+              opacity: 1;
+              visibility: visible;
+              height: auto;
+              display: block;
+            }
 
-          .errors-container li {
-            color: hsl(0, 0%, 100%);
-            font-family: 'Roboto Condensed', sans-serif;
-            font-weight: 400;
-          }
+            .errors-container li {
+              color: hsl(0, 0%, 100%);
+              font-family: 'Roboto Condensed', sans-serif;
+              font-weight: 400;
+            }
         </style>
   
         <section class="form">

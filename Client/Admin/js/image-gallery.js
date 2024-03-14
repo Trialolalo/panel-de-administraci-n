@@ -181,11 +181,16 @@ class ImageGallery extends HTMLElement {
             }
 
             .images{
-              height: 12rem
+              height: 12rem;
+              position: relative;
             }
 
             .images:hover img{
               opacity: 0.6;
+            }
+
+            .images.selected{
+              border: 5px solid green;
             }
 
             .input-file{
@@ -221,6 +226,28 @@ class ImageGallery extends HTMLElement {
               width: 9rem;
             }
 
+            .button-close-img{
+              position: absolute;
+              cursor: pointer;
+              left: 9.5rem;
+              top: 0.5rem;
+              z-index: 1006;
+            }
+
+            .button-close-img svg{
+              width: 1.5rem;
+              background: transparent;
+              background-color: red;
+              border: none;
+              border-radius: 20px;
+              fill: white;
+              opacity: 0.2;
+            }
+
+            .button-close-img svg:hover{
+              opacity: 1;
+            }
+
         </style>
   
       
@@ -253,33 +280,7 @@ class ImageGallery extends HTMLElement {
                     <input type="file" name="file"/>
                   </label>
               </div>
-              <div class="images">
-                <img src="https://img.asmedia.epimg.net/resizer/Nk2QA3MjvO_H_VZsRkCDOShkhCU=/644x362/cloudfront-eu-central-1.images.arcpublishing.com/diarioas/QNDS4LEKNRDY7MMSIX6C43OE7A.jpg">
-              </div>
-              <div class="images">
-                <img src="https://technoahora.com/wp-content/uploads/2023/10/dragons-dogma-2-capcom-tokyo-gam-1024x650.webp">
-              </div>
-              <div class="images">
-                <img src="https://cdn.dlcompare.com/others_jpg/upload/news/image/dragons-dogma-2-desvela-su-nueva-a9509372-image-a9509356.jpg">
-              </div>
-              <div class="images">
-                <img src="https://img.asmedia.epimg.net/resizer/Nk2QA3MjvO_H_VZsRkCDOShkhCU=/644x362/cloudfront-eu-central-1.images.arcpublishing.com/diarioas/QNDS4LEKNRDY7MMSIX6C43OE7A.jpg">
-              </div>
-              <div class="images">
-                <img src="https://technoahora.com/wp-content/uploads/2023/10/dragons-dogma-2-capcom-tokyo-gam-1024x650.webp">
-              </div>
-              <div class="images">
-                <img src="https://cdn.dlcompare.com/others_jpg/upload/news/image/dragons-dogma-2-desvela-su-nueva-a9509372-image-a9509356.jpg">
-              </div>
-              <div class="images">
-                <img src="https://img.asmedia.epimg.net/resizer/Nk2QA3MjvO_H_VZsRkCDOShkhCU=/644x362/cloudfront-eu-central-1.images.arcpublishing.com/diarioas/QNDS4LEKNRDY7MMSIX6C43OE7A.jpg">
-              </div>
-              <div class="images">
-                <img src="https://technoahora.com/wp-content/uploads/2023/10/dragons-dogma-2-capcom-tokyo-gam-1024x650.webp">
-              </div>
-              <div class="images">
-                <img src="https://cdn.dlcompare.com/others_jpg/upload/news/image/dragons-dogma-2-desvela-su-nueva-a9509372-image-a9509356.jpg">
-              </div>
+               
             </div>
             <aside>
               <div class="form-element">
@@ -313,33 +314,48 @@ class ImageGallery extends HTMLElement {
       </div>            
       `
 
-    const uploadModal = this.shadow.querySelector('.upload-modal')
-
-    uploadModal.addEventListener('click', (event) => {
-      if (event.target.closest('.tab')) {
-        if (event.target.closest('.tab').classList.contains('active')) {
-          return
-        }
-
-        const tabClicked = event.target.closest('.tab')
-        const tabActive = tabClicked.parentElement.querySelector('.active')
-
-        tabClicked.classList.add('active')
-        if (tabActive) {
-          tabActive.classList.remove('active')
-        }
-        event.preventDefault()
-        tabClicked.closest('.upload-window').querySelector(`.tab-content.active[data-tab="${tabActive ? tabActive.dataset.tab : ''}"]`).classList.remove('active')
-        tabClicked.closest('.upload-window').querySelector(`.tab-content[data-tab="${tabClicked.dataset.tab}"]`).classList.add('active')
-      } else if (event.target.closest('.button-close')) {
-        uploadModal.classList.remove('active')
-      }
-    })
+    this.getThumbnails()
 
     const uploadFile = this.shadow.querySelector('input')
+    const uploadModal = this.shadow.querySelector('.upload-modal')
 
     uploadFile.addEventListener('change', (event) => {
       this.uploadFile(event.target.files[0])
+    })
+
+    uploadModal.addEventListener('click', async event => {
+      if (event.target.closest('.button-close-img')) {
+        const deleteButton = event.target.closest('.button-close-img')
+        const filename = deleteButton.dataset.filename
+
+        try {
+          await fetch(`${this.endpoint}/${filename}`, {
+            method: 'DELETE'
+          })
+        } catch (error) {
+          console.error(error)
+        }
+      }
+
+      if (event.target.closest('.images')) {
+        const imageClicked = event.target.closest('.images')
+        const imageActive = imageClicked.parentElement.querySelector('.selected')
+
+        imageClicked.classList.add('selected')
+        if (imageActive) {
+          imageActive.classList.remove('selected')
+        }
+        event.preventDefault()
+      }
+    })
+  }
+
+  async getThumbnails () {
+    const result = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/images`)
+    const thumbnails = await result.json()
+
+    thumbnails.rows.forEach(file => {
+      this.createImage(file.filename)
     })
   }
 
@@ -355,15 +371,24 @@ class ImageGallery extends HTMLElement {
     const filenames = await result.json()
 
     filenames.forEach(filename => {
-      const imagesContainer = this.shadow.querySelector('.form-row')
-      const imageContainer = document.createElement('div')
-      imageContainer.classList.add('images')
-      imagesContainer.appendChild(imageContainer)
-
-      const image = document.createElement('img')
-      image.src = `${import.meta.env.VITE_API_URL}/api/admin/images/${filename}`
-      imageContainer.appendChild(image)
+      this.createImage(filename)
     })
+  }
+
+  createImage (filename) {
+    const imagesContainer = this.shadow.querySelector('.form-row')
+    const imageContainer = document.createElement('div')
+    imageContainer.classList.add('images')
+    imagesContainer.appendChild(imageContainer)
+
+    const image = document.createElement('img')
+    image.src = `${import.meta.env.VITE_API_URL}/api/admin/images/${filename}`
+    const buttonClose = document.createElement('button')
+    buttonClose.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" /></svg>'
+    buttonClose.classList.add('button-close-img')
+    buttonClose.dataset.filename = filename
+    imageContainer.appendChild(image)
+    imageContainer.appendChild(buttonClose)
   }
 }
 
