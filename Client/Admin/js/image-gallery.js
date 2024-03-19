@@ -173,16 +173,18 @@ class ImageGallery extends HTMLElement {
             }
 
             .images img{
-              height: 12rem;
-              width: 12rem;
+              height: 100%;
+              width: 100%;
               object-fit: cover;
               box-sizing: border-box;
               border: 5px solid white;
             }
 
             .images{
+              width: 12rem;
               height: 12rem;
               position: relative;
+              box-sizing: border-box;
             }
 
             .images:hover img{
@@ -191,6 +193,7 @@ class ImageGallery extends HTMLElement {
 
             .images.selected{
               border: 5px solid green;
+              
             }
 
             .input-file{
@@ -221,9 +224,14 @@ class ImageGallery extends HTMLElement {
               font-weight: 700;
               font-size: 1rem;
               background-color: hsl(88, 67%, 62%);
+              opacity: 0.6;
               padding: 1rem;
-              cursor: pointer;
               width: 9rem;
+            }
+
+            .select-button.active button{
+              cursor: pointer;
+              opacity: 1;
             }
 
             .button-close-img{
@@ -340,10 +348,14 @@ class ImageGallery extends HTMLElement {
       if (event.target.closest('.images')) {
         const imageClicked = event.target.closest('.images')
         const imageActive = imageClicked.parentElement.querySelector('.selected')
+        const chooseImage = this.shadow.querySelector('.select-button')
 
         imageClicked.classList.add('selected')
+        chooseImage.classList.add('active')
+
         if (imageActive) {
           imageActive.classList.remove('selected')
+          chooseImage.classList.remove('active')
         }
         event.preventDefault()
       }
@@ -371,7 +383,8 @@ class ImageGallery extends HTMLElement {
     const filenames = await result.json()
 
     filenames.forEach(filename => {
-      this.createImage(filename)
+      const imageContainer = this.createImage(filename)
+      imageContainer.classList.add('selected')
     })
   }
 
@@ -389,6 +402,7 @@ class ImageGallery extends HTMLElement {
     buttonClose.dataset.filename = filename
     imageContainer.appendChild(image)
     imageContainer.appendChild(buttonClose)
+    return imageContainer
   }
 }
 
