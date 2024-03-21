@@ -291,7 +291,9 @@ class Form extends HTMLElement {
                 </div>
                 
                 <div class="tab-content" data-tab="images">
-                    <upload-image-component></upload-image-component>
+                  <div class="form-row">
+                    <upload-image-component name="featured.image"></upload-image-component>
+                  </div>
                 </div>
 
                 

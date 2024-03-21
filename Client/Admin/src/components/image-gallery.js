@@ -324,6 +324,13 @@ class ImageGallery extends HTMLElement {
 
     this.getThumbnails()
 
+    const chooseImage = this.shadow.querySelector('.select-button')
+
+    chooseImage.addEventListener('click', (event) => {
+      const selectedImage = this.shadow.querySelector('.selected img').dataset.filename
+      alert(selectedImage)
+    })
+
     const uploadFile = this.shadow.querySelector('input')
     const uploadModal = this.shadow.querySelector('.upload-modal')
 
@@ -337,9 +344,10 @@ class ImageGallery extends HTMLElement {
         const filename = deleteButton.dataset.filename
 
         try {
-          await fetch(`${this.endpoint}/${filename}`, {
+          await fetch(`${import.meta.env.VITE_API_URL}/api/admin/images/${filename}`, {
             method: 'DELETE'
           })
+          deleteButton.parentElement.remove()
         } catch (error) {
           console.error(error)
         }
@@ -399,7 +407,7 @@ class ImageGallery extends HTMLElement {
     const buttonClose = document.createElement('button')
     buttonClose.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" /></svg>'
     buttonClose.classList.add('button-close-img')
-    buttonClose.dataset.filename = filename
+    image.dataset.filename = filename
     imageContainer.appendChild(image)
     imageContainer.appendChild(buttonClose)
     return imageContainer

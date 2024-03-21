@@ -1,3 +1,5 @@
+import { store } from '../redux/store.js'
+import { setImageGallery } from '../redux/images-slice.js'
 class UploadImage extends HTMLElement {
   constructor () {
     super()
@@ -6,6 +8,8 @@ class UploadImage extends HTMLElement {
 
   connectedCallback () {
     this.render()
+    this.name = this.getAttribute('name')
+    console.log(this.name)
   }
 
   render () {
@@ -73,37 +77,13 @@ class UploadImage extends HTMLElement {
         <div class="form-element">
           <div class="form-element-label">
             <label>
-                Subir imagen
+                Imagen destacada
             </label>
             <div class="upload-button">
               <button>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                 <path d="M9,16V10H5L12,3L19,10H15V16H9M5,20V18H19V20H5Z" />
               </svg>
-              </button>
-            </div>
-          </div>
-          <div class="form-element-label">
-            <label>
-                Subir imagen
-            </label>
-            <div class="upload-button">
-              <button>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                  <path d="M9,16V10H5L12,3L19,10H15V16H9M5,20V18H19V20H5Z" />
-                </svg>
-              </button>
-            </div>
-          </div>
-          <div class="form-element-label">
-            <label>
-                Subir imagen
-            </label>
-            <div class="upload-button">
-              <button>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                  <path d="M9,16V10H5L12,3L19,10H15V16H9M5,20V18H19V20H5Z" />
-                </svg>
               </button>
             </div>
           </div>
@@ -115,6 +95,11 @@ class UploadImage extends HTMLElement {
 
     uploadModal?.addEventListener('click', async (event) => {
       if (event.target.closest('button')) {
+        const image = {
+          name: this.getAttribute('name')
+        }
+
+        store.dispatch(setImageGallery(image))
         document.dispatchEvent(new CustomEvent('showModalUpload'))
       }
     })

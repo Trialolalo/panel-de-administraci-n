@@ -13,6 +13,7 @@
     "vite": "^5.0.11"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^2.2.2",
     "webfontloader": "^1.6.28"
   }
 }
