@@ -1,3 +1,5 @@
+import { store } from '../redux/store.js'
+import { showImage, removeImage } from '../redux/images-slice.js'
 class ImageGallery extends HTMLElement {
   constructor () {
     super()
@@ -298,7 +300,7 @@ class ImageGallery extends HTMLElement {
                     </label>
                 </div>
                 <div class="form-element-input">
-                    <input  name="submitted-name" autocomplete="name" />
+                    <input  name="title" autocomplete="name" />
                 </div>
               </div>
               <div class="form-element">
@@ -308,7 +310,7 @@ class ImageGallery extends HTMLElement {
                     </label>
                 </div>
                 <div class="form-element-input">
-                    <input  name="submitted-name" autocomplete="name" />
+                    <input  name="alt" autocomplete="name" />
                 </div>
               </div>
             </aside>
@@ -324,13 +326,6 @@ class ImageGallery extends HTMLElement {
 
     this.getThumbnails()
 
-    const chooseImage = this.shadow.querySelector('.select-button')
-
-    chooseImage.addEventListener('click', (event) => {
-      const selectedImage = this.shadow.querySelector('.selected img').dataset.filename
-      alert(selectedImage)
-    })
-
     const uploadFile = this.shadow.querySelector('input')
     const uploadModal = this.shadow.querySelector('.upload-modal')
 
@@ -339,6 +334,10 @@ class ImageGallery extends HTMLElement {
     })
 
     uploadModal.addEventListener('click', async event => {
+      if (event.target.closest('.button-close')) {
+        uploadModal.classList.remove('active')
+      }
+
       if (event.target.closest('.button-close-img')) {
         const deleteButton = event.target.closest('.button-close-img')
         const filename = deleteButton.dataset.filename
@@ -366,6 +365,17 @@ class ImageGallery extends HTMLElement {
           chooseImage.classList.remove('active')
         }
         event.preventDefault()
+      }
+
+      if (event.target.closest('.select-button.active')) {
+        let image = store.getState().images.imageGallery
+        const filename = this.shadow.querySelector('.selected img').dataset.filename
+        const alt = this.shadow.querySelector('input[name="alt"]').value
+        const title = this.shadow.querySelector('input[name="title"]').value
+        image = { ...image, alt, title, filename }
+        console.log(image)
+        store.dispatch(showImage(image))
+        uploadModal.classList.remove('active')
       }
     })
   }
