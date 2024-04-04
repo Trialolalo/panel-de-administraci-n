@@ -4,9 +4,11 @@ const Faq = mongooseDb.Faq
 
 exports.create = async (req, res) => {
   try {
+    const result = await req.imageService.resizeImages(req.body.images)
     const data = await Faq.create(req.body)
     res.status(200).send(data)
   } catch (err) {
+    console.log(err)
     res.status(500).send({
       message: err.errors || 'Algún error ha surgido al insertar el dato.'
     })
@@ -19,6 +21,8 @@ exports.findAll = async (req, res) => {
   const offset = (page - 1) * limit
   const whereStatement = {}
   whereStatement.deletedAt = { $exists: false }
+
+  // const emailService = await req.emailService.sendEmail()
 
   for (const key in req.query) {
     if (req.query[key] !== '' && key !== 'page' && key !== 'size') {

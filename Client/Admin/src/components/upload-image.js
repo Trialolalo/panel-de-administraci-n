@@ -1,5 +1,6 @@
+import isEqual from 'lodash-es/isEqual'
 import { store } from '../redux/store.js'
-import { setImageGallery, removeImage } from '../redux/images-slice.js'
+import { setImageGallery, removeImage, addImage } from '../redux/images-slice.js'
 
 class UploadImage extends HTMLElement {
   constructor () {
@@ -11,11 +12,19 @@ class UploadImage extends HTMLElement {
 
   connectedCallback () {
     this.render()
-    console.log(this.name)
     this.unsubscribe = store.subscribe(() => {
       const currentState = store.getState()
-      this.images = currentState.images.showedImages
-      this.loadFile(this.images)
+
+      console.log(currentState.images.showedImages)
+
+      if (currentState.images.showedImages.length > 0 && !isEqual(this.images, currentState.images.showedImages)) {
+        this.images = currentState.images.showedImages
+        this.loadFile(this.images)
+      }
+
+      if (currentState.images.showedImages.length === 0) {
+        this.deleteFile()
+      }
     })
   }
 
@@ -154,11 +163,12 @@ class UploadImage extends HTMLElement {
   }
 
   loadFile (images) {
-    console.log(images)
-
     images.forEach(image => {
       if (image.name === this.name) {
-        console.log(image)
+        store.dispatch(addImage({
+          ...image,
+          imageConfiguration: JSON.parse(this.getAttribute('image-configuration'))
+        }))
         const file = document.createElement('div')
         file.classList.add('file')
         const newImage = document.createElement('img')
@@ -177,6 +187,14 @@ class UploadImage extends HTMLElement {
           store.dispatch(removeImage(image))
         })
       }
+    })
+  }
+
+  deleteFile () {
+    const deleteThumbnail = this.shadow.querySelectorAll('.file')
+
+    deleteThumbnail.forEach(thumbnail => {
+      thumbnail.remove()
     })
   }
 }

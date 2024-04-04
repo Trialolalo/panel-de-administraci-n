@@ -373,7 +373,6 @@ class ImageGallery extends HTMLElement {
         const alt = this.shadow.querySelector('input[name="alt"]').value
         const title = this.shadow.querySelector('input[name="title"]').value
         image = { ...image, alt, title, filename }
-        console.log(image)
         store.dispatch(showImage(image))
         uploadModal.classList.remove('active')
       }

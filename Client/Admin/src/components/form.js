@@ -1,3 +1,6 @@
+import { store } from '../redux/store.js'
+import { removeImages } from '../redux/images-slice.js'
+
 class Form extends HTMLElement {
   constructor () {
     super()
@@ -292,7 +295,24 @@ class Form extends HTMLElement {
                 
                 <div class="tab-content" data-tab="images">
                   <div class="form-row">
-                    <upload-image-component name="featured.image"></upload-image-component>
+                    <upload-image-component name="featured" image-configuration='{
+                      "xs": {
+                        "widthPx": "60",
+                        "heightPx": "60"
+                      },
+                      "sm": {
+                        "widthPx": "250",
+                        "heightPx": "250"
+                      },
+                      "md": {
+                        "widthPx": "500",
+                        "heightPx": "500"
+                      },
+                      "lg": {
+                        "widthPx": "1000",
+                        "heightPx": "1000"
+                      }
+                    }'></upload-image-component>
                   </div>
                 </div>
 
@@ -348,6 +368,8 @@ class Form extends HTMLElement {
         const formData = new FormData(form)
         const formDataJson = {}
 
+        formDataJson.images = store.getState().images.selectedImages
+
         for (const [key, value] of formData.entries()) {
           if (key.includes('locales')) {
             const [prefix, locales, field] = key.split('.')
@@ -373,8 +395,6 @@ class Form extends HTMLElement {
             formDataJson[key] = value ?? null
           }
         }
-
-        console.log(formDataJson)
 
         if (!formDataJson.id) {
           delete formDataJson.id
@@ -409,6 +429,11 @@ class Form extends HTMLElement {
           this.displayErrors(error.message)
         }
         document.dispatchEvent(new CustomEvent('refresh'))
+      }
+
+      if (event.target.closest('.form-clean-button')) {
+        this.shadow.querySelector('form').reset()
+        store.dispatch(removeImages())
       }
     })
   }

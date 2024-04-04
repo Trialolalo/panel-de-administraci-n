@@ -6,11 +6,10 @@ module.exports = class ImageService {
   uploadImage = async images => {
     const result = []
 
-    for (const image of images.file) {
-      const filename = image.originalname.replace(/[\s_]/g, '-')
+    for (const image of images) {
+      const filename = image.filename
 
       const newFilename = await fs.access(path.join(__dirname, `../storage/images/gallery/original/${path.parse(filename).name}.webp`)).then(async () => {
-        // TODO Dar al usuario la opción de sobreescribir la imagen
         return `${path.parse(filename).name}-${new Date().getTime()}.webp`
       }).catch(async () => {
         return `${path.parse(filename).name}.webp`
@@ -28,11 +27,21 @@ module.exports = class ImageService {
       result.push(newFilename)
     }
 
-    return result
+    // return result
   }
 
   resizeImages = async (images) => {
+    for (const image of images) {
+      const filename = image.filename.split('.')[0]
+      const originalFilename = path.join(__dirname, `../storage/images/gallery/original/${filename}.webp`)
 
+      Object.entries(image.imageConfiguration).forEach(async ([key, value]) => {
+        await sharp(originalFilename)
+          .resize(parseInt(value.widthPx), parseInt(value.heightPx))
+          .webp({ lossless: true })
+          .toFile(path.join(__dirname, `../storage/images/resized/${filename}-${value.widthPx}x${value.heightPx}.webp`))
+      })
+    }
   }
 
   deleteImages = async filename => {
