@@ -31,17 +31,37 @@ module.exports = class ImageService {
   }
 
   resizeImages = async (images) => {
+    const resizedImages = {}
     for (const image of images) {
       const filename = image.filename.split('.')[0]
       const originalFilename = path.join(__dirname, `../storage/images/gallery/original/${filename}.webp`)
 
-      Object.entries(image.imageConfiguration).forEach(async ([key, value]) => {
-        await sharp(originalFilename)
-          .resize(parseInt(value.widthPx), parseInt(value.heightPx))
-          .webp({ lossless: true })
-          .toFile(path.join(__dirname, `../storage/images/resized/${filename}-${value.widthPx}x${value.heightPx}.webp`))
-      })
+      for (const size in image.imageConfiguration) {
+        console.log(size)
+        if (!resizedImages[size]) {
+          resizedImages[size] = {}
+        }
+
+        resizedImages[size][image.name] = {
+          originalFilename,
+          filename,
+          title: image.title,
+          alt: image.alt,
+          widthPx: image.imageConfiguration[size].widthPx,
+          heightPx: image.imageConfiguration[size].heightPx
+
+        }
+      }
+
+      // Object.entries(image.imageConfiguration).forEach(async ([key, value]) => {
+      //   await sharp(originalFilename)
+      //     .resize(parseInt(value.widthPx), parseInt(value.heightPx))
+      //     .webp({ lossless: true })
+      //     .toFile(path.join(__dirname, `../storage/images/resized/${filename}-${value.widthPx}x${value.heightPx}.webp`))
+      // })
     }
+    console.log(resizedImages)
+    return resizedImages
   }
 
   deleteImages = async filename => {
