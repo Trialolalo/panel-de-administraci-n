@@ -15,6 +15,14 @@ export const imagesSlice = createSlice({
       state.showedImages.push(action.payload)
     },
     showImages: (state, action) => {
+      if (action.payload.xs) {
+        state.showedImages = Object.entries(action.payload.xs).map(([key, value]) => ({
+          name: key,
+          filename: value.originalFilename,
+          title: value.title,
+          alt: value.alt
+        }))
+      }
     },
     addImage: (state, action) => {
       if (!state.selectedImages.some(image =>

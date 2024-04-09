@@ -5,12 +5,6 @@ exports.findAll = async (req, res) => {
   const whereStatement = {}
   whereStatement.deletedAt = { $exists: false }
 
-  for (const key in req.query) {
-    if (req.query[key] !== '' && key !== 'page' && key !== 'size') {
-      whereStatement[key] = { $regex: req.query[key], $options: 'i' }
-    }
-  }
-
   try {
     const result = await Faq.find(whereStatement)
       .sort({ createdAt: -1 })
@@ -18,12 +12,12 @@ exports.findAll = async (req, res) => {
       .exec()
 
     const response = result.map(doc => ({
-      locales: doc.locales[req.userLanguage]
+      locales: doc.locales[req.userLanguage],
+      images: doc.images
     }))
 
     res.status(200).send(response)
   } catch (err) {
-    console.log(err)
     res.status(500).send({
       message: err.message || 'Algún error ha surgido al recuperar los datos.'
     })

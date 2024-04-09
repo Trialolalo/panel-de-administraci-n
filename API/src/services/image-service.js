@@ -7,12 +7,12 @@ module.exports = class ImageService {
     const result = []
 
     for (const image of images) {
-      const filename = image.filename
+      const filename = image.originalname.split('.')[0].replaceAll('_', '-')
 
-      const newFilename = await fs.access(path.join(__dirname, `../storage/images/gallery/original/${path.parse(filename).name}.webp`)).then(async () => {
-        return `${path.parse(filename).name}-${new Date().getTime()}.webp`
+      const newFilename = await fs.access(path.join(__dirname, `../storage/images/gallery/original/${filename}.webp`)).then(async () => {
+        return `${filename}-${new Date().getTime()}.webp`
       }).catch(async () => {
-        return `${path.parse(filename).name}.webp`
+        return `${filename}.webp`
       })
 
       await sharp(image.buffer)
@@ -27,7 +27,7 @@ module.exports = class ImageService {
       result.push(newFilename)
     }
 
-    // return result
+    return result
   }
 
   resizeImages = async (images) => {
@@ -37,30 +37,28 @@ module.exports = class ImageService {
       const originalFilename = path.join(__dirname, `../storage/images/gallery/original/${filename}.webp`)
 
       for (const size in image.imageConfiguration) {
-        console.log(size)
         if (!resizedImages[size]) {
           resizedImages[size] = {}
         }
 
         resizedImages[size][image.name] = {
-          originalFilename,
-          filename,
+          originalFilename: `${filename}.webp`,
+          filename: `${filename}-${image.imageConfiguration[size].widthPx}x${image.imageConfiguration[size].heightPx}.webp`,
           title: image.title,
           alt: image.alt,
           widthPx: image.imageConfiguration[size].widthPx,
           heightPx: image.imageConfiguration[size].heightPx
-
         }
       }
 
-      // Object.entries(image.imageConfiguration).forEach(async ([key, value]) => {
-      //   await sharp(originalFilename)
-      //     .resize(parseInt(value.widthPx), parseInt(value.heightPx))
-      //     .webp({ lossless: true })
-      //     .toFile(path.join(__dirname, `../storage/images/resized/${filename}-${value.widthPx}x${value.heightPx}.webp`))
-      // })
+      Object.entries(image.imageConfiguration).forEach(async ([key, value]) => {
+        await sharp(originalFilename)
+          .resize(parseInt(value.widthPx), parseInt(value.heightPx))
+          .webp({ lossless: true })
+          .toFile(path.join(__dirname, `../storage/images/resized/${filename}-${value.widthPx}x${value.heightPx}.webp`))
+      })
     }
-    console.log(resizedImages)
+
     return resizedImages
   }
 

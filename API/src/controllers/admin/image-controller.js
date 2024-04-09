@@ -4,7 +4,7 @@ const Image = mongooseDb.Image
 
 exports.create = async (req, res) => {
   try {
-    const result = await req.imageService.uploadImage(req.files)
+    const result = await req.imageService.uploadImage(req.files.file)
 
     for (const filename of result) {
       await Image.create({ filename })
@@ -12,7 +12,7 @@ exports.create = async (req, res) => {
 
     res.status(200).send(result)
   } catch (error) {
-
+    console.log(error)
   }
 }
 

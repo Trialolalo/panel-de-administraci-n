@@ -201,6 +201,7 @@ class Footer extends HTMLElement {
 
         this.data.forEach(faq =>{
             const tableItem = document.createElement('a')
+            console.log(faq)
             tableItem.innerHTML = `${faq.locales.question}: ${faq.locales.answer}`
             tableList.appendChild(tableItem)
         })

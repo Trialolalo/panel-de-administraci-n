@@ -1,5 +1,5 @@
 import { store } from '../redux/store.js'
-import { removeImages } from '../redux/images-slice.js'
+import { removeImages, showImages } from '../redux/images-slice.js'
 
 class Form extends HTMLElement {
   constructor () {
@@ -462,10 +462,25 @@ class Form extends HTMLElement {
 
   showElement (element) {
     Object.entries(element).forEach(([key, value]) => {
-      console.log(key + ' ' + value)
-      const input = this.shadow.querySelector(`[name = "${key}"]`)
-      if (input) {
-        input.value = value
+      if (typeof value === 'object') {
+        if (key === 'locales') {
+          Object.entries(value).forEach(([key, value]) => {
+            const language = key
+            Object.entries(value).forEach(([key, value]) => {
+              const input = this.shadow.querySelector(`[name="locales.${language}.${key}"]`)
+              input.value = value
+            })
+          })
+        } else if (key === 'images') {
+          store.dispatch(showImages(value))
+        } else {
+
+        }
+      } else {
+        const input = this.shadow.querySelector(`[name = "${key}"]`)
+        if (input) {
+          input.value = value
+        }
       }
     })
   }

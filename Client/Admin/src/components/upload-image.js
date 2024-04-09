@@ -23,6 +23,7 @@ class UploadImage extends HTMLElement {
       }
 
       if (currentState.images.showedImages.length === 0) {
+        this.images = []
         this.deleteFile()
       }
     })

@@ -4,7 +4,7 @@ const Faq = mongooseDb.Faq
 
 exports.create = async (req, res) => {
   try {
-    const result = await req.imageService.resizeImages(req.body.images)
+    req.body.images = await req.imageService.resizeImages(req.body.images)
     const data = await Faq.create(req.body)
     res.status(200).send(data)
   } catch (err) {
@@ -42,11 +42,11 @@ exports.findAll = async (req, res) => {
 
     const response = {
       rows: result.map(doc => ({
-        ...doc,
         id: doc._id,
         _id: undefined,
-        createdAt: moment(doc.createdAt).format('YYYY-MM-DD HH:mm'),
-        updatedAt: moment(doc.updatedAt).format('YYYY-MM-DD HH:mm')
+        name: doc.name,
+        creado: moment(doc.createdAt).format('YYYY-MM-DD HH:mm'),
+        actualizado: moment(doc.updatedAt).format('YYYY-MM-DD HH:mm')
       })),
       meta: {
         total: count,
@@ -92,6 +92,7 @@ exports.update = async (req, res) => {
   const id = req.params.id
 
   try {
+    req.body.images = await req.imageService.resizeImages(req.body.images)
     const data = await Faq.findByIdAndUpdate(id, req.body, { new: true })
 
     if (data) {
