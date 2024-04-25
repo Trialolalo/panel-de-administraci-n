@@ -106,8 +106,13 @@ class Footer extends HTMLElement {
             .faqs .submenu a{
                 color: hsl(0, 0%, 100%);
                 text-decoration: none;
-                display: block;
+                display: flex;
                 padding: 10px;
+                width: auto;
+            }
+
+            .faqs .submenu img{
+                max-width: 10vh;
             }
 
             .social-media ul{
@@ -199,12 +204,44 @@ class Footer extends HTMLElement {
         const tableList = document.createElement('li')
         tableFaq.appendChild(tableList)
 
-        this.data.forEach(faq =>{
+        this.data.forEach(faq => {
             const tableItem = document.createElement('a')
-            console.log(faq)
-            tableItem.innerHTML = `${faq.locales.question}: ${faq.locales.answer}`
+            const pictureElement = document.createElement('picture')
+            const contentContainer = document.createElement('div')
+
+            const sourceElementXS = document.createElement('source')
+            sourceElementXS.setAttribute('srcset', `${import.meta.env.VITE_API_URL}/api/front/images/image/${faq.images.xs.featured.filename}`)
+            sourceElementXS.setAttribute('media', '(max-width: 576px)')
+            pictureElement.appendChild(sourceElementXS)
+
+            const sourceElementSM = document.createElement('source')
+            sourceElementSM.setAttribute('srcset', `${import.meta.env.VITE_API_URL}/api/front/images/image/${faq.images.sm.featured.filename}`)
+            sourceElementSM.setAttribute('media', '(min-width: 577px) and (max-width: 768px)')
+            pictureElement.appendChild(sourceElementSM)
+
+            const sourceElementMD = document.createElement('source')
+            sourceElementMD.setAttribute('srcset', `${import.meta.env.VITE_API_URL}/api/front/images/image/${faq.images.md.featured.filename}`)
+            sourceElementMD.setAttribute('media', '(min-width: 769px) and (max-width: 992px)')
+            pictureElement.appendChild(sourceElementMD)
+
+            const sourceElementLG = document.createElement('source')
+            sourceElementLG.setAttribute('srcset', `${import.meta.env.VITE_API_URL}/api/front/images/image/${faq.images.lg.featured.filename}`)
+            sourceElementLG.setAttribute('media', '(min-width: 993px)')
+            pictureElement.appendChild(sourceElementLG)
+        
+            const imgElement = document.createElement('img')
+            imgElement.setAttribute('src', `${import.meta.env.VITE_API_URL}/api/front/images/image/${faq.images.xs.featured.filename}`)
+            imgElement.setAttribute('alt', faq.images.xs.featured.alt)
+            imgElement.setAttribute('alt', faq.images.xs.featured.title)
+            pictureElement.appendChild(imgElement)
+        
+            contentContainer.innerHTML = `${faq.locales.question}: ${faq.locales.answer}`
+        
+            tableItem.appendChild(contentContainer)
+            tableItem.appendChild(pictureElement)
+        
             tableList.appendChild(tableItem)
-        })
+        });
                 
     }
 
