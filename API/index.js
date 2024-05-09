@@ -9,7 +9,7 @@ const userAgentMiddleware = require('./src/middlewares/user-agent')
 const authCookieMiddleware = require('./src/middlewares/auth-cookie')
 
 const corsOptions = {
-  origin: ['http://dev-pedidos.com']
+  origin: [process.env.API_URL]
 }
 
 app.use(cors(corsOptions))
